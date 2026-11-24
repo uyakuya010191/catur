@@ -3,16 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <title>Catur Geng Solo — Permainan Catur &amp; Mode Adventure</title>
-    <meta
-      name="description"
-      content="Catur Geng Solo: mainkan catur melawan AI hingga tingkat Grandmaster, laga 2 pemain lokal, dan taklukkan Mode Adventure studi catur legendaris."
-    />
+    <title>Catur Geng Solo</title>
+    <meta name="description" content="Catur Geng Solo — Mainkan catur melawan AI, Mode Adventure, Latihan, Turnamen, Peringkat Elo, dan Profil Avatar." />
     <meta property="og:title" content="Catur Geng Solo" />
-    <meta
-      property="og:description"
-      content="Mainkan catur melawan AI hingga tingkat Grandmaster atau pecahkan teka-teki Mode Adventure bertahap di PC maupun Android."
-    />
     <meta property="og:type" content="website" />
     <style>
       :root {
@@ -59,8 +52,8 @@
       .nav-bar {
         max-width: 1120px;
         margin: 0 auto;
-        padding: 0 16px;
-        height: 54px;
+        padding: 0 12px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -68,7 +61,7 @@
       }
       .brand {
         font-weight: 800;
-        font-size: 1.05rem;
+        font-size: 1rem;
         letter-spacing: -0.02em;
         white-space: nowrap;
         background: none;
@@ -77,87 +70,111 @@
         cursor: pointer;
         padding: 0;
       }
-      .top-menu {
+      .desktop-nav {
         display: flex;
         align-items: center;
         gap: 6px;
       }
-      .menu-btn {
-        border: 1px solid var(--border);
-        background: var(--card-alt);
-        color: var(--text);
-        font-size: 0.84rem;
+      .desktop-nav button {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.85rem;
         font-weight: 600;
-        padding: 8px 13px;
+        padding: 8px 12px;
         border-radius: 10px;
         cursor: pointer;
         white-space: nowrap;
       }
-      .menu-btn.active {
+      .desktop-nav button.active {
         background: var(--accent);
-        border-color: var(--accent);
         color: #ffffff;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .avatar-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        padding: 4px 8px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .avatar-circle {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border: 2px solid var(--accent);
+        background: #1e293b;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .avatar-circle.lg {
+        width: 54px;
+        height: 54px;
+        font-size: 28px;
+        border-width: 3px;
       }
       .theme-toggle {
         border: 1px solid var(--border);
         background: var(--card-alt);
         color: var(--text);
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        padding: 7px 11px;
-        border-radius: 10px;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-      .mobile-menu-toggle {
-        display: none;
-        border: 1px solid rgba(217, 119, 6, 0.45);
-        background: rgba(217, 119, 6, 0.14);
-        color: #f59e0b;
-        font-size: 0.8rem;
-        font-weight: 700;
-        padding: 7px 11px;
-        border-radius: 10px;
+        padding: 6px 10px;
+        border-radius: 9px;
         cursor: pointer;
       }
-      .mobile-sub-menu {
+      .mobile-grid-nav {
         display: none;
-      }
-      .mobile-drawer {
-        display: none;
-        padding: 10px 12px;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+        padding: 5px 6px;
         border-top: 1px solid var(--border);
-        background: var(--card);
-        gap: 8px;
-        grid-template-columns: repeat(2, 1fr);
+        background: var(--card-alt);
       }
-      .mobile-drawer.open {
-        display: grid;
+      .mobile-grid-nav button {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 8px;
+        padding: 5px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 9.5px;
+        font-weight: 700;
+        cursor: pointer;
+        min-height: 40px;
+      }
+      .mobile-grid-nav button .ico {
+        font-size: 13px;
+        line-height: 1.1;
+        margin-bottom: 2px;
+      }
+      .mobile-grid-nav button.active {
+        background: var(--accent);
+        color: #ffffff;
       }
       @media (max-width: 768px) {
-        .nav-bar {
-          height: 48px;
-          padding: 0 12px;
-        }
-        .desktop-only-menu {
-          display: none !important;
-        }
-        .mobile-menu-toggle {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-        }
-        .mobile-sub-menu {
-          display: flex !important;
-          gap: 6px;
-          padding: 6px 10px;
-          border-top: 1px solid var(--border);
-          background: var(--card-alt);
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-        .mobile-sub-menu::-webkit-scrollbar {
+        .desktop-nav {
           display: none;
+        }
+        .mobile-grid-nav {
+          display: grid;
         }
       }
       main {
@@ -165,7 +182,7 @@
         max-width: 1120px;
         width: 100%;
         margin: 0 auto;
-        padding: 18px 14px;
+        padding: 16px 12px;
       }
       @media (max-width: 768px) {
         main {
@@ -174,13 +191,13 @@
       }
       .grid-2 {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
+        grid-template-columns: 5fr 7fr;
+        gap: 16px;
       }
       .arena-grid {
         display: grid;
         grid-template-columns: minmax(0, 580px) minmax(0, 1fr);
-        gap: 18px;
+        gap: 16px;
         align-items: start;
       }
       @media (max-width: 900px) {
@@ -193,26 +210,15 @@
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 16px;
-        padding: 18px;
-      }
-      h1 {
-        margin: 0 0 8px;
-        font-size: 1.55rem;
-        line-height: 1.25;
+        padding: 16px;
       }
       h2 {
         margin: 0 0 12px;
-        font-size: 1.15rem;
-      }
-      p.muted {
-        color: var(--muted);
-        font-size: 0.9rem;
-        line-height: 1.55;
-        margin: 0 0 14px;
+        font-size: 1.1rem;
       }
       .label {
         display: block;
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 700;
         color: var(--muted);
         margin-bottom: 6px;
@@ -221,13 +227,13 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
       }
       .btn-grid-5 {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 6px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
       }
       @media (max-width: 520px) {
         .btn-grid-5 {
@@ -239,7 +245,7 @@
         background: var(--card-alt);
         color: var(--text);
         border-radius: 10px;
-        padding: 10px 8px;
+        padding: 9px 6px;
         font-size: 0.8rem;
         font-weight: 600;
         cursor: pointer;
@@ -255,9 +261,9 @@
         border: none;
         background: var(--accent);
         color: #fff;
-        font-size: 0.94rem;
+        font-size: 0.92rem;
         font-weight: 700;
-        padding: 13px 16px;
+        padding: 12px 16px;
         border-radius: 12px;
         cursor: pointer;
       }
@@ -268,9 +274,9 @@
         border: 1px solid var(--border);
         background: var(--card-alt);
         color: var(--text);
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        padding: 9px 12px;
+        padding: 8px 12px;
         border-radius: 10px;
         cursor: pointer;
       }
@@ -385,7 +391,7 @@
         background: var(--card);
         border: 1px solid var(--border);
         margin: 6px 0;
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         font-weight: 700;
       }
       .clock {
@@ -399,7 +405,7 @@
         color: #fff;
       }
       .moves-box {
-        max-height: 240px;
+        max-height: 220px;
         overflow-y: auto;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         font-size: 0.82rem;
@@ -409,7 +415,7 @@
         line-height: 1.7;
       }
       .stage-list {
-        max-height: 310px;
+        max-height: 290px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -503,7 +509,6 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
-        margin-bottom: 14px;
       }
       .swatch {
         border: 1px solid var(--border);
@@ -511,7 +516,7 @@
         padding: 6px;
         background: var(--card-alt);
         color: var(--text);
-        font-size: 0.76rem;
+        font-size: 0.74rem;
         cursor: pointer;
       }
       .swatch.active {
@@ -520,10 +525,51 @@
       .swatch-bar {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        height: 18px;
+        height: 16px;
         border-radius: 5px;
         overflow: hidden;
         margin-bottom: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      th,
+      td {
+        padding: 10px 8px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+      .input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        font-size: 0.88rem;
+      }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      @media (max-width: 640px) {
+        .stat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .stat-card {
+        background: var(--card-alt);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
       }
       footer {
         text-align: center;
@@ -538,59 +584,73 @@
     </style>
   <script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
   <body>
-    <header id="appHeader">
+    <header>
       <div class="nav-bar">
         <button type="button" class="brand" id="brandBtn">Catur Geng Solo</button>
 
-        <nav class="top-menu desktop-only-menu" aria-label="Menu Utama">
-          <button type="button" class="menu-btn active" data-tab="play">Bermain</button>
-          <button type="button" class="menu-btn" data-tab="adventure">Adventure</button>
+        <nav class="desktop-nav" aria-label="Menu Desktop">
+          <button type="button" class="active" data-tab="play">Main</button>
+          <button type="button" data-tab="adventure">Adventure</button>
+          <button type="button" data-tab="practice">Latihan</button>
+          <button type="button" data-tab="tournament">Turnamen</button>
+          <button type="button" data-tab="leaderboard">Peringkat</button>
+          <button type="button" data-tab="profile">Profil</button>
         </nav>
 
-        <div style="display: flex; align-items: center; gap: 6px">
-          <button type="button" class="mobile-menu-toggle" id="mobileMenuBtn">☰ Menu</button>
+        <div class="header-right">
+          <button type="button" class="avatar-chip" id="headerProfileBtn">
+            <span class="avatar-circle" id="hdrAvatar">♔</span>
+            <span id="hdrElo">1200</span>
+          </button>
           <button type="button" class="theme-toggle" id="darkToggleBtn">Tema</button>
         </div>
       </div>
 
-      <nav class="mobile-sub-menu" aria-label="Menu Atas Mobile">
-        <button type="button" class="menu-btn active" data-tab="play">Bermain</button>
-        <button type="button" class="menu-btn" data-tab="adventure">Mode Adventure</button>
+      <nav class="mobile-grid-nav" aria-label="Menu Mobile">
+        <button type="button" class="active" data-tab="play"><span class="ico">⚔</span><span>Main</span></button>
+        <button type="button" data-tab="adventure"><span class="ico">🗺</span><span>Adventure</span></button>
+        <button type="button" data-tab="practice"><span class="ico">🧭</span><span>Latihan</span></button>
+        <button type="button" data-tab="tournament"><span class="ico">🏆</span><span>Turnamen</span></button>
+        <button type="button" data-tab="leaderboard"><span class="ico">📊</span><span>Peringkat</span></button>
+        <button type="button" data-tab="profile"><span class="ico">👤</span><span>Profil</span></button>
       </nav>
-
-      <div class="mobile-drawer" id="mobileDrawer">
-        <button type="button" class="menu-btn active" data-tab="play">Bermain Catur</button>
-        <button type="button" class="menu-btn" data-tab="adventure">Mode Adventure</button>
-      </div>
     </header>
 
-    <main id="mainArea">
-      <!-- LOBBY / INITIAL SCREEN -->
+    <main>
+      <!-- LOBBY / PLAY -->
       <section id="lobbyView" class="grid-2">
-        <div class="card">
-          <div style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; margin-bottom: 6px">
-            Papan Catur Mandiri · PC &amp; Android
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; gap: 14px">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 12px; background: var(--card-alt); border: 1px solid var(--border)">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+              <span class="avatar-circle lg" id="lobbyAvatar" style="width: 44px; height: 44px; font-size: 22px">♔</span>
+              <div style="min-width: 0">
+                <div id="lobbyName" style="font-weight: 800; font-size: 0.95rem">Pemain Solo</div>
+                <div id="lobbySub" style="font-size: 0.75rem; color: var(--muted)">Penantang Baru · 0 Menang</div>
+              </div>
+            </div>
+            <div style="text-align: right">
+              <div style="font-size: 0.7rem; color: var(--muted)">Elo</div>
+              <div id="lobbyElo" style="font-size: 1.15rem; font-weight: 800; color: #f59e0b">1200</div>
+            </div>
           </div>
-          <h1>Selamat Datang di Catur Geng Solo</h1>
-          <p class="muted">
-            Mainkan laga cepat 3 menit hingga klasik 1 jam melawan mesin AI adaptif sampai tingkat Grandmaster, tantang teman dalam mode 2 pemain lokal, atau pecahkan teka-teki Mode Adventure.
-          </p>
 
-          <span class="label">Tema Papan Catur</span>
-          <div class="theme-swatch-grid" id="themeSwatches"></div>
+          <div>
+            <span class="label">Tema Papan Catur</span>
+            <div class="theme-swatch-grid" id="themeSwatches"></div>
+          </div>
         </div>
 
         <div class="card">
           <h2>Atur Pertandingan</h2>
 
-          <span class="label">Mode Permainan</span>
+          <span class="label">Mode</span>
           <div class="btn-row" id="modeBtns">
             <button type="button" class="opt-btn active" data-mode="ai">Lawan AI</button>
             <button type="button" class="opt-btn" data-mode="local">Lokal 2P</button>
-            <button type="button" class="opt-btn" data-go-adv="1">Mode Adventure</button>
+            <button type="button" class="opt-btn" data-go-adv="1">Adventure</button>
           </div>
 
-          <span class="label">Durasi Bermain</span>
+          <span class="label">Durasi</span>
           <div class="btn-grid-5" id="timeBtns">
             <button type="button" class="opt-btn" data-sec="180">3m</button>
             <button type="button" class="opt-btn active" data-sec="300">5m</button>
@@ -600,16 +660,16 @@
           </div>
 
           <div id="aiConfigWrap">
-            <span class="label">Kekuatan AI</span>
+            <span class="label">Tingkat AI</span>
             <div class="btn-grid-5" id="diffBtns">
-              <button type="button" class="opt-btn" data-depth="1" data-label="Pemula (800)">Pemula</button>
-              <button type="button" class="opt-btn" data-depth="2" data-label="Santai (1150)">Santai</button>
-              <button type="button" class="opt-btn active" data-depth="2" data-label="Klub (1500)">Klub</button>
-              <button type="button" class="opt-btn" data-depth="3" data-label="Master (1950)">Master</button>
-              <button type="button" class="opt-btn" data-depth="3" data-label="GM (2300)">GM</button>
+              <button type="button" class="opt-btn" data-depth="1" data-elo="800" data-label="Pemula">Pemula</button>
+              <button type="button" class="opt-btn" data-depth="2" data-elo="1150" data-label="Santai">Santai</button>
+              <button type="button" class="opt-btn active" data-depth="2" data-elo="1500" data-label="Klub">Klub</button>
+              <button type="button" class="opt-btn" data-depth="3" data-elo="1950" data-label="Master">Master</button>
+              <button type="button" class="opt-btn" data-depth="3" data-elo="2300" data-label="GM">GM</button>
             </div>
 
-            <span class="label">Pilih Warna</span>
+            <span class="label">Buah Catur</span>
             <div class="btn-row" id="colorBtns">
               <button type="button" class="opt-btn active" data-col="w">Putih</button>
               <button type="button" class="opt-btn" data-col="random">Acak</button>
@@ -621,7 +681,7 @@
         </div>
       </section>
 
-      <!-- ACTIVE MATCH ARENA -->
+      <!-- ACTIVE ARENA -->
       <section id="arenaView" class="hidden">
         <div class="arena-grid">
           <div class="board-wrap">
@@ -633,7 +693,7 @@
               <div class="board" id="playBoard"></div>
               <div class="promo-overlay hidden" id="playPromo">
                 <div class="promo-box">
-                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi Bidak</div>
+                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi</div>
                   <div class="promo-btns" id="playPromoBtns"></div>
                 </div>
               </div>
@@ -644,23 +704,23 @@
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px">
               <button type="button" class="secondary-btn" id="fsBtn">Layar Penuh</button>
-              <button type="button" class="secondary-btn" id="flipBtn">Putar Papan</button>
+              <button type="button" class="secondary-btn" id="flipBtn">Putar</button>
               <button type="button" class="secondary-btn" id="soundBtn">Suara: Nyala</button>
               <button type="button" class="secondary-btn" id="undoBtn">Urungkan</button>
               <button type="button" class="secondary-btn" id="resignBtn">Menyerah</button>
-              <button type="button" class="secondary-btn" id="backLobbyBtn">Kembali ke Lobi</button>
+              <button type="button" class="secondary-btn" id="backLobbyBtn">Lobi</button>
             </div>
           </div>
 
           <div class="card">
-            <h2>Status &amp; Riwayat Langkah</h2>
+            <h2>Riwayat Langkah</h2>
             <div id="matchNotice" class="notice hidden"></div>
             <div class="moves-box" id="moveList">Belum ada langkah.</div>
           </div>
         </div>
       </section>
 
-      <!-- ADVENTURE MODE -->
+      <!-- ADVENTURE -->
       <section id="adventureView" class="hidden">
         <div class="arena-grid">
           <div class="board-wrap">
@@ -668,32 +728,120 @@
               <div class="board" id="advBoard"></div>
               <div class="promo-overlay hidden" id="advPromo">
                 <div class="promo-box">
-                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi Bidak</div>
+                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi</div>
                   <div class="promo-btns" id="advPromoBtns"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 16px">
+          <div style="display: flex; flex-direction: column; gap: 14px">
             <div class="card">
-              <div id="advMeta" style="font-size: 0.78rem; color: var(--muted); font-weight: 700"></div>
+              <div id="advMeta" style="font-size: 0.76rem; color: var(--muted); font-weight: 700"></div>
               <h2 id="advTitle" style="margin-top: 4px"></h2>
-              <p id="advObjective" style="font-size: 0.9rem; font-weight: 600; color: #f59e0b; margin: 0 0 12px"></p>
+              <p id="advObjective" style="font-size: 0.88rem; font-weight: 600; color: #f59e0b; margin: 0 0 12px"></p>
               <div id="advNotice" class="notice hidden"></div>
               <div style="display: flex; flex-wrap: wrap; gap: 8px">
                 <button type="button" class="secondary-btn" id="advHintBtn">Petunjuk</button>
-                <button type="button" class="secondary-btn" id="advResetBtn">Ulangi Tahap</button>
+                <button type="button" class="secondary-btn" id="advResetBtn">Ulangi</button>
                 <button type="button" class="secondary-btn hidden" id="advNextBtn" style="background: var(--accent); color: #fff; border-color: var(--accent)">
-                  Tahap Berikutnya
+                  Berikutnya
                 </button>
               </div>
             </div>
 
             <div class="card">
-              <h2 id="advProgressLabel">Peta Perjalanan (0/12)</h2>
+              <h2 id="advProgressLabel">Peta Petualangan</h2>
               <div class="stage-list" id="advStageList"></div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LATIHAN / PRACTICE -->
+      <section id="practiceView" class="hidden">
+        <div class="arena-grid">
+          <div class="board-wrap">
+            <div class="board" id="pracBoard"></div>
+          </div>
+          <div class="card">
+            <h2>Papan Latihan Bebas</h2>
+            <p style="font-size: 0.84rem; color: var(--muted); margin: 0 0 12px">
+              Gerakkan buah putih dan hitam secara bebas untuk berlatih pembukaan dan taktik.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px">
+              <button type="button" class="secondary-btn" id="pracUndoBtn">Urungkan</button>
+              <button type="button" class="secondary-btn" id="pracResetBtn">Reset Papan</button>
+            </div>
+            <div class="moves-box" id="pracMoves">Belum ada langkah.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TURNAMEN -->
+      <section id="tournamentView" class="hidden">
+        <div class="card" style="margin-bottom: 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+          <div>
+            <div style="font-size: 0.76rem; color: #f59e0b; font-weight: 700">Turnamen Mingguan · 5 Menit</div>
+            <h2 style="margin: 4px 0">Piala Catur Geng Solo</h2>
+            <div style="font-size: 0.8rem; color: var(--muted)">Menang = 3 poin · Remis = 1 poin · Hadiah 500 Koin</div>
+          </div>
+          <button type="button" class="primary-btn" id="joinTourneyBtn" style="width: auto; padding: 11px 20px">
+            Mainkan Laga Turnamen
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Klasemen Turnamen</h2>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Pemain</th><th>Elo</th><th>Poin</th></tr>
+            </thead>
+            <tbody id="tourneyTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PERINGKAT / LEADERBOARD -->
+      <section id="leaderboardView" class="hidden">
+        <div class="card">
+          <h2>Papan Peringkat Elo Global</h2>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Pemain</th><th>Gelar</th><th>Elo</th><th>M/S/K</th></tr>
+            </thead>
+            <tbody id="leaderTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PROFIL & AVATAR -->
+      <section id="profileView" class="hidden">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="label">Elo</div><div id="statElo" style="font-size: 1.25rem; font-weight: 800">1200</div></div>
+          <div class="stat-card"><div class="label">Menang</div><div id="statWins" style="font-size: 1.25rem; font-weight: 800; color: #10b981">0</div></div>
+          <div class="stat-card"><div class="label">Seri / Kalah</div><div id="statDL" style="font-size: 1.25rem; font-weight: 800">0 / 0</div></div>
+          <div class="stat-card"><div class="label">Koin</div><div id="statCoins" style="font-size: 1.25rem; font-weight: 800; color: #f59e0b">100</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h2>Kustomisasi Profil &amp; Avatar</h2>
+            <span class="label">Nama Tampilan</span>
+            <input type="text" class="input" id="profNameInput" maxlength="30" style="margin-bottom: 12px" />
+
+            <span class="label">Pilih Avatar</span>
+            <div class="btn-grid-5" id="avatarPicker"></div>
+
+            <span class="label">Warna Bingkai Avatar</span>
+            <div class="btn-grid-5" id="framePicker"></div>
+
+            <button type="button" class="primary-btn" id="saveProfBtn">Simpan Profil</button>
+          </div>
+
+          <div class="card">
+            <h2>Riwayat Pertandingan</h2>
+            <div id="profMatches" style="font-size: 0.84rem; color: var(--muted)">Belum ada riwayat pertandingan.</div>
           </div>
         </div>
       </section>
@@ -705,8 +853,29 @@
       import { Chess } from 'https://esm.sh/chess.js@1.4.0';
 
       const SVG_NS = 'http://www.w3.org/2000/svg';
+      const AVATARS = ['♔', '♕', '♘', '♗', '♖'];
+      const FRAMES = ['#d97706', '#10b981', '#3b82f6', '#e11d48', '#8b5cf6'];
 
-      // Web Audio Sound Engine
+      let profile = JSON.parse(localStorage.getItem('cgs_html_profile_v2') || 'null') || {
+        name: 'Pemain Solo',
+        avatar: '♔',
+        frame: '#d97706',
+        title: 'Penantang Baru',
+        elo: 1200,
+        wins: 0,
+        draws: 0,
+        losses: 0,
+        coins: 100,
+        tourneyPoints: 0,
+        matches: [],
+      };
+
+      function saveProfile() {
+        localStorage.setItem('cgs_html_profile_v2', JSON.stringify(profile));
+        syncProfileUI();
+      }
+
+      // Sound Engine
       let audioCtx = null;
       let soundOn = true;
 
@@ -742,17 +911,17 @@
         osc.start(startTime);
         osc.stop(startTime + 0.09);
 
-        const clickOsc = ctx.createOscillator();
-        const clickGain = ctx.createGain();
-        clickOsc.type = 'sine';
-        clickOsc.frequency.setValueAtTime(freq * 2.4, startTime);
-        clickOsc.frequency.exponentialRampToValueAtTime(140, startTime + 0.025);
-        clickGain.gain.setValueAtTime(vol * 0.5, startTime);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.028);
-        clickOsc.connect(clickGain);
-        clickGain.connect(ctx.destination);
-        clickOsc.start(startTime);
-        clickOsc.stop(startTime + 0.032);
+        const cOsc = ctx.createOscillator();
+        const cGain = ctx.createGain();
+        cOsc.type = 'sine';
+        cOsc.frequency.setValueAtTime(freq * 2.4, startTime);
+        cOsc.frequency.exponentialRampToValueAtTime(140, startTime + 0.025);
+        cGain.gain.setValueAtTime(vol * 0.5, startTime);
+        cGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.028);
+        cOsc.connect(cGain);
+        cGain.connect(ctx.destination);
+        cOsc.start(startTime);
+        cOsc.stop(startTime + 0.032);
       }
 
       function playSound(kind) {
@@ -761,21 +930,20 @@
         if (!audioCtx) return;
         const run = () => {
           const now = audioCtx.currentTime;
-          if (kind === 'move') {
-            playWoodTap(audioCtx, now, 220, 0.42);
-          } else if (kind === 'castle') {
+          if (kind === 'move') playWoodTap(audioCtx, now, 220, 0.42);
+          else if (kind === 'castle') {
             playWoodTap(audioCtx, now, 220, 0.4);
             playWoodTap(audioCtx, now + 0.085, 250, 0.4);
           } else if (kind === 'capture') {
             const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const gain = ctx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(320, now);
             osc.frequency.exponentialRampToValueAtTime(75, now + 0.09);
             gain.gain.setValueAtTime(0.36, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
             osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            gain.connect(ctx.destination);
             osc.start(now);
             osc.stop(now + 0.11);
             playWoodTap(audioCtx, now, 280, 0.35);
@@ -788,7 +956,7 @@
             gain.gain.setValueAtTime(0.34, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
             osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            gain.connect(ctx.destination);
             osc.start(now);
             osc.stop(now + 0.23);
           } else if (kind === 'gameover') {
@@ -801,19 +969,15 @@
               gain.gain.setValueAtTime(0.24, s);
               gain.gain.exponentialRampToValueAtTime(0.001, s + 0.26);
               osc.connect(gain);
-              gain.connect(audioCtx.destination);
+              gain.connect(ctx.destination);
               osc.start(s);
               osc.stop(s + 0.27);
             });
           }
         };
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume().then(run).catch(() => {});
-        } else {
-          run();
-        }
+        if (audioCtx.state === 'suspended') audioCtx.resume().then(run).catch(() => {});
+        else run();
       }
-
       window.addEventListener('pointerdown', unlockAudio, { passive: true });
 
       function createPieceSvg(type, color) {
@@ -826,7 +990,6 @@
         const svg = document.createElementNS(SVG_NS, 'svg');
         svg.setAttribute('viewBox', '0 0 45 45');
         svg.setAttribute('class', 'piece-svg ' + color);
-
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('fill', fill);
         g.setAttribute('stroke', stroke);
@@ -834,21 +997,21 @@
         g.setAttribute('stroke-linecap', 'round');
         g.setAttribute('stroke-linejoin', 'round');
 
-        const addPath = (d, sColor, sWidth, customFill) => {
+        const addPath = (d, sC, sW, cF) => {
           const p = document.createElementNS(SVG_NS, 'path');
           p.setAttribute('d', d);
-          if (sColor) p.setAttribute('stroke', sColor);
-          if (sWidth) p.setAttribute('stroke-width', sWidth);
-          if (customFill) p.setAttribute('fill', customFill);
+          if (sC) p.setAttribute('stroke', sC);
+          if (sW) p.setAttribute('stroke-width', sW);
+          if (cF) p.setAttribute('fill', cF);
           g.appendChild(p);
         };
-        const addCircle = (cx, cy, r, customFill, noStroke) => {
+        const addCircle = (cx, cy, r, cF, nS) => {
           const c = document.createElementNS(SVG_NS, 'circle');
           c.setAttribute('cx', cx);
           c.setAttribute('cy', cy);
           c.setAttribute('r', r);
-          if (customFill) c.setAttribute('fill', customFill);
-          if (noStroke) c.setAttribute('stroke', 'none');
+          if (cF) c.setAttribute('fill', cF);
+          if (nS) c.setAttribute('stroke', 'none');
           g.appendChild(c);
         };
 
@@ -887,41 +1050,42 @@
           addPath('M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10V37z');
           addPath('M11.5 30c5.5-3 15.5-3 21 0M11.5 33.5c5.5-3 15.5-3 21 0M11.5 37c5.5-3 15.5-3 21 0', detail, '1.5', 'none');
         }
-
         svg.appendChild(g);
         return svg;
       }
 
       const THEMES = [
-        { id: 'wood', name: 'Kayu Klasik', light: '#EED7B5', dark: '#B4845A' },
-        { id: 'emerald', name: 'Zamrud Turnamen', light: '#EEEED2', dark: '#769656' },
-        { id: 'slate', name: 'Batu Sabak', light: '#CBD5E1', dark: '#475569' },
-        { id: 'marble', name: 'Marmer Karara', light: '#F3F4F6', dark: '#6B7280' },
-        { id: 'ocean', name: 'Samudra Malam', light: '#D8E3EC', dark: '#4A7396' },
-        { id: 'gold', name: 'Emas Kerajaan', light: '#F5E6C8', dark: '#8C6239' },
+        { id: 'wood', name: 'Kayu', light: '#EED7B5', dark: '#B4845A' },
+        { id: 'emerald', name: 'Zamrud', light: '#EEEED2', dark: '#769656' },
+        { id: 'slate', name: 'Sabak', light: '#CBD5E1', dark: '#475569' },
+        { id: 'marble', name: 'Marmer', light: '#F3F4F6', dark: '#6B7280' },
+        { id: 'ocean', name: 'Samudra', light: '#D8E3EC', dark: '#4A7396' },
+        { id: 'gold', name: 'Emas', light: '#F5E6C8', dark: '#8C6239' },
       ];
 
       const ADVENTURE_STAGES = [
-        { stage: 1, chapter: 'Babak I · Desa Bidak', title: 'Gerbang Koridor', diff: 'Pemula', elo: 750, fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', sol: ['d1d8'], obj: 'Skakmat dalam 1 langkah', hint: 'Raja Hitam terperangkap oleh ketiga bidaknya di baris kedelapan.', exp: '1. Rd8# langsung menutup jalur pelarian Raja Hitam.' },
-        { stage: 2, chapter: 'Babak I · Desa Bidak', title: 'Tandem Arab Klasik', diff: 'Pemula', elo: 900, fen: '7k/1R6/5N2/8/8/8/8/6K1 w - - 0 1', sol: ['b7h7'], obj: 'Skakmat dalam 1 langkah', hint: 'Kuda f6 sudah menjaga petak g8 sekaligus melindungi benteng di h7.', exp: '1. Rh7# adalah pola Skakmat Arab.' },
-        { stage: 3, chapter: 'Babak I · Desa Bidak', title: 'Baterai Ratu & Gajah', diff: 'Dasar', elo: 1050, fen: '6k1/5ppp/8/8/8/2B5/5PPP/4Q1K1 w - - 0 1', sol: ['e1e8'], obj: 'Skakmat dalam 1 langkah', hint: 'Dorong Menteri ke baris belakang.', exp: '1. Qe8# mengakhiri perlawanan Raja Hitam.' },
-        { stage: 4, chapter: 'Babak II · Lembah Taktik', title: 'Tusuk Sate Agung', diff: 'Menengah', elo: 1250, fen: '1k6/8/8/4q3/8/8/8/2B3K1 w - - 0 1', sol: ['c1f4'], obj: 'Menangkan Menteri Hitam', hint: 'Menteri dan Raja Hitam berdiri pada diagonal terang.', exp: '1. Bf4+ menusuk Menteri e5 langsung ke Raja b8.' },
-        { stage: 5, chapter: 'Babak II · Lembah Taktik', title: 'Skakmat Tercekik', diff: 'Menengah', elo: 1450, fen: '5r1k/6pp/7N/8/8/1Q6/8/6K1 w - - 0 1', sol: ['b3g8', 'f8g8', 'h6f7'], obj: 'Skakmat dalam 2 langkah', hint: 'Korbankan Menteri di g8 agar Benteng menyumbat Rajanya.', exp: '1. Qg8+!! Rxg8 2. Nf7# menghasilkan Smothered Mate.' },
-        { stage: 6, chapter: 'Babak II · Lembah Taktik', title: 'Opera Paris 1858', diff: 'Lanjutan', elo: 1650, fen: '4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 1 16', sol: ['b3b8', 'd7b8', 'd1d8'], obj: 'Skakmat dalam 2 langkah', hint: 'Tarik Kuda Hitam menjauh dari d8 dengan pengorbanan Menteri.', exp: '1. Qb8+!! Nxb8 2. Rd8# adalah mahakarya Paul Morphy.' },
-        { stage: 7, chapter: 'Babak III · Benteng Master', title: 'Sayap Kembar Boden', diff: 'Lanjutan', elo: 1850, fen: '2kr4/pp1n1ppp/2p5/8/Q4B2/3B4/PPP2PPP/2KR4 w - - 0 1', sol: ['a4c6', 'b7c6', 'd3a6'], obj: 'Skakmat dalam 2 langkah', hint: 'Hancurkan perisai bidak c6 dengan Menteri.', exp: '1. Qxc6+! bxc6 2. Ba6# membentuk Boden Mate.' },
-        { stage: 8, chapter: 'Babak III · Benteng Master', title: 'Pengalihan Koridor', diff: 'Master', elo: 2000, fen: '3r2k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1', sol: ['e2e8', 'd8e8', 'e1e8'], obj: 'Skakmat dalam 2 langkah', hint: 'Paksa Benteng pertahanan meninggalkan baris kedelapan.', exp: '1. Qxe8+! Rxe8 2. Rxe8# menembus baris belakang.' },
-        { stage: 9, chapter: 'Babak III · Benteng Master', title: 'Skakmat Anastasia', diff: 'Master', elo: 2150, fen: '5rk1/1p3ppp/8/3N4/7R/2Q5/5PPP/6K1 w - - 0 1', sol: ['d5e7', 'g8h8', 'h4h7', 'h8h7', 'c3h3'], obj: 'Skakmat dalam 3 langkah', hint: 'Kunci lajur g dengan Kuda di e7 lalu makan h7 dengan Benteng.', exp: '1. Ne7+ Kh8 2. Rxh7+! Kxh7 3. Qh3#.' },
-        { stage: 10, chapter: 'Babak IV · Puncak Grandmaster', title: 'Serangan Ganda Baris Belakang', diff: 'Grandmaster', elo: 2350, fen: '2r1r1k1/5ppp/8/8/8/1B3Q2/5PPP/3RR1K1 w - - 0 1', sol: ['f3f7', 'g8h8', 'e1e8', 'c8e8', 'f7e8'], obj: 'Skakmat dalam 3 langkah', hint: 'Serang f7 terlebih dahulu sebelum menukar perwira berat di e8.', exp: '1. Qxf7+ Kh8 2. Rxe8+ Rxe8 3. Qxe8#.' },
-        { stage: 11, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Segitiga Réti (1921)', diff: 'Grandmaster', elo: 2600, fen: '7K/8/k1P5/7p/8/8/8/8 w - - 0 1', sol: ['h8g7', 'h5h4', 'g7f6', 'a6b6', 'f6e5'], obj: 'Kejar bidak sekaligus kawal promosi (3 langkah kunci)', hint: 'Jangan lurus ke h4; bergeraklah diagonal menuju dua arah sekaligus!', exp: '1. Kg7! h4 2. Kf6! Kb6 3. Ke5!! — Studi legendaris Richard Réti.' },
-        { stage: 12, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Saavedra (1895)', diff: 'Legendaris', elo: 2850, fen: '8/8/1KP5/3r4/8/8/8/k7 w - - 0 1', sol: ['c6c7', 'd5d6', 'b6b5', 'd6d5', 'b5b4', 'd5d4', 'b4b3', 'd4d3', 'b3c2', 'd3d4', 'c7c8r'], obj: 'Menang melawan Benteng (6 langkah presisi)', hint: 'Zig-zag Raja ke c2, lalu waspadai jebakan Pat saat promosi bidak!', exp: '1. c7 Rd6+ 2. Kb5 Rd5+ 3. Kb4 Rd4+ 4. Kb3 Rd3+ 5. Kc2! Rd4 6. c8=R!! Promosi Benteng menghindari Pat.' },
+        { stage: 1, chapter: 'Babak I · Desa Bidak', title: 'Gerbang Koridor', diff: 'Pemula', elo: 750, fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', sol: ['d1d8'], obj: 'Skakmat dalam 1 langkah', hint: 'Raja Hitam terperangkap di baris kedelapan.', exp: '1. Rd8# menutup pelarian Raja Hitam.' },
+        { stage: 2, chapter: 'Babak I · Desa Bidak', title: 'Tandem Arab Klasik', diff: 'Pemula', elo: 900, fen: '7k/1R6/5N2/8/8/8/8/6K1 w - - 0 1', sol: ['b7h7'], obj: 'Skakmat dalam 1 langkah', hint: 'Kuda f6 melindungi benteng di h7.', exp: '1. Rh7# Skakmat Arab.' },
+        { stage: 3, chapter: 'Babak I · Desa Bidak', title: 'Baterai Ratu & Gajah', diff: 'Dasar', elo: 1050, fen: '6k1/5ppp/8/8/8/2B5/5PPP/4Q1K1 w - - 0 1', sol: ['e1e8'], obj: 'Skakmat dalam 1 langkah', hint: 'Dorong Menteri ke baris belakang.', exp: '1. Qe8# mengakhiri perlawanan.' },
+        { stage: 4, chapter: 'Babak II · Lembah Taktik', title: 'Tusuk Sate Agung', diff: 'Menengah', elo: 1250, fen: '1k6/8/8/4q3/8/8/8/2B3K1 w - - 0 1', sol: ['c1f4'], obj: 'Menangkan Menteri Hitam', hint: 'Menteri dan Raja di satu diagonal terang.', exp: '1. Bf4+ menusuk Menteri e5.' },
+        { stage: 5, chapter: 'Babak II · Lembah Taktik', title: 'Skakmat Tercekik', diff: 'Menengah', elo: 1450, fen: '5r1k/6pp/7N/8/8/1Q6/8/6K1 w - - 0 1', sol: ['b3g8', 'f8g8', 'h6f7'], obj: 'Skakmat dalam 2 langkah', hint: 'Korbankan Menteri di g8.', exp: '1. Qg8+!! Rxg8 2. Nf7#.' },
+        { stage: 6, chapter: 'Babak II · Lembah Taktik', title: 'Opera Paris 1858', diff: 'Lanjutan', elo: 1650, fen: '4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 1 16', sol: ['b3b8', 'd7b8', 'd1d8'], obj: 'Skakmat dalam 2 langkah', hint: 'Korbankan Menteri di b8.', exp: '1. Qb8+!! Nxb8 2. Rd8#.' },
+        { stage: 7, chapter: 'Babak III · Benteng Master', title: 'Sayap Kembar Boden', diff: 'Lanjutan', elo: 1850, fen: '2kr4/pp1n1ppp/2p5/8/Q4B2/3B4/PPP2PPP/2KR4 w - - 0 1', sol: ['a4c6', 'b7c6', 'd3a6'], obj: 'Skakmat dalam 2 langkah', hint: 'Hancurkan bidak c6 dengan Menteri.', exp: '1. Qxc6+! bxc6 2. Ba6#.' },
+        { stage: 8, chapter: 'Babak III · Benteng Master', title: 'Pengalihan Koridor', diff: 'Master', elo: 2000, fen: '3r2k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1', sol: ['e2e8', 'd8e8', 'e1e8'], obj: 'Skakmat dalam 2 langkah', hint: 'Tukar di e8.', exp: '1. Qxe8+! Rxe8 2. Rxe8#.' },
+        { stage: 9, chapter: 'Babak III · Benteng Master', title: 'Skakmat Anastasia', diff: 'Master', elo: 2150, fen: '5rk1/1p3ppp/8/3N4/7R/2Q5/5PPP/6K1 w - - 0 1', sol: ['d5e7', 'g8h8', 'h4h7', 'h8h7', 'c3h3'], obj: 'Skakmat dalam 3 langkah', hint: 'Kunci dengan Ne7+ lalu Rxh7+.', exp: '1. Ne7+ Kh8 2. Rxh7+! Kxh7 3. Qh3#.' },
+        { stage: 10, chapter: 'Babak IV · Puncak Grandmaster', title: 'Serangan Ganda Baris Belakang', diff: 'Grandmaster', elo: 2350, fen: '2r1r1k1/5ppp/8/8/8/1B3Q2/5PPP/3RR1K1 w - - 0 1', sol: ['f3f7', 'g8h8', 'e1e8', 'c8e8', 'f7e8'], obj: 'Skakmat dalam 3 langkah', hint: 'Serang f7 dulu.', exp: '1. Qxf7+ Kh8 2. Rxe8+ Rxe8 3. Qxe8#.' },
+        { stage: 11, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Segitiga Réti (1921)', diff: 'Grandmaster', elo: 2600, fen: '7K/8/k1P5/7p/8/8/8/8 w - - 0 1', sol: ['h8g7', 'h5h4', 'g7f6', 'a6b6', 'f6e5'], obj: 'Kejar bidak & kawal promosi', hint: 'Bergeraklah diagonal ke g7 -> f6 -> e5!', exp: '1. Kg7! h4 2. Kf6! Kb6 3. Ke5!!' },
+        { stage: 12, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Saavedra (1895)', diff: 'Legendaris', elo: 2850, fen: '8/8/1KP5/3r4/8/8/8/k7 w - - 0 1', sol: ['c6c7', 'd5d6', 'b6b5', 'd6d5', 'b5b4', 'd5d4', 'b4b3', 'd4d3', 'b3c2', 'd3d4', 'c7c8r'], obj: 'Menang melawan Benteng (6 langkah)', hint: 'Zig-zag ke c2, lalu promosi Benteng!', exp: '1. c7 Rd6+ 2. Kb5 Rd5+ 3. Kb4 Rd4+ 4. Kb3 Rd3+ 5. Kc2! Rd4 6. c8=R!!' },
       ];
 
       let currentTab = 'play';
       let inArena = false;
       let playMode = 'ai';
+      let isTourneyMatch = false;
       let timeSec = 300;
       let aiDepth = 2;
-      let aiLabel = 'Klub (1500)';
+      let aiElo = 1500;
+      let aiLabel = 'Klub';
       let colorPref = 'w';
       let playerColor = 'w';
       let orientation = 'w';
@@ -944,20 +1108,123 @@
       let advLast = null;
       let advStatus = 'playing';
 
+      let pracChess = new Chess();
+      let pracSelected = null;
+      let pracLast = null;
+
       const $ = (id) => document.getElementById(id);
+
+      function syncProfileUI() {
+        $('hdrAvatar').textContent = profile.avatar;
+        $('hdrAvatar').style.borderColor = profile.frame;
+        $('hdrElo').textContent = profile.elo;
+
+        $('lobbyAvatar').textContent = profile.avatar;
+        $('lobbyAvatar').style.borderColor = profile.frame;
+        $('lobbyName').textContent = profile.name;
+        $('lobbySub').textContent = `${profile.title} · ${profile.wins} Menang`;
+        $('lobbyElo').textContent = profile.elo;
+
+        $('statElo').textContent = profile.elo;
+        $('statWins').textContent = profile.wins;
+        $('statDL').textContent = `${profile.draws} / ${profile.losses}`;
+        $('statCoins').textContent = profile.coins;
+        $('profNameInput').value = profile.name;
+
+        const mBox = $('profMatches');
+        if (!profile.matches.length) {
+          mBox.textContent = 'Belum ada riwayat pertandingan.';
+        } else {
+          mBox.textContent = '';
+          profile.matches.slice(0, 12).forEach((m) => {
+            const row = document.createElement('div');
+            row.style.padding = '8px 0';
+            row.style.borderBottom = '1px solid var(--border)';
+            row.textContent = `${m.res} vs ${m.opp} · ${m.term} · Elo ${m.delta >= 0 ? '+' + m.delta : m.delta}`;
+            mBox.appendChild(row);
+          });
+        }
+      }
+
+      function renderLeaderboard() {
+        const rivals = [
+          { name: 'Raka Pratama', title: 'Master Geng Solo', elo: 1840, w: 42, d: 8, l: 11 },
+          { name: 'Dewi Anggraini', title: 'Kandidat Master', elo: 1620, w: 29, d: 6, l: 14 },
+          { name: 'Bagas Santoso', title: 'Ahli Taktik', elo: 1410, w: 19, d: 5, l: 12 },
+          { name: profile.name + ' (Anda)', title: profile.title, elo: profile.elo, w: profile.wins, d: profile.draws, l: profile.losses, me: true },
+        ].sort((a, b) => b.elo - a.elo);
+
+        const tbody = $('leaderTable');
+        tbody.textContent = '';
+        rivals.forEach((r, idx) => {
+          const tr = document.createElement('tr');
+          if (r.me) tr.style.background = 'rgba(217, 119, 6, 0.14)';
+          const vals = ['#' + (idx + 1), r.name, r.title, String(r.elo), `${r.w}/${r.d}/${r.l}`];
+          vals.forEach((v) => {
+            const td = document.createElement('td');
+            td.textContent = v;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderTournament() {
+        const list = [
+          { name: 'Raka Pratama', elo: 1840, pts: 12 },
+          { name: 'Dewi Anggraini', elo: 1620, pts: 9 },
+          { name: profile.name + ' (Anda)', elo: profile.elo, pts: profile.tourneyPoints, me: true },
+        ].sort((a, b) => b.pts - a.pts);
+
+        const tbody = $('tourneyTable');
+        tbody.textContent = '';
+        list.forEach((r, idx) => {
+          const tr = document.createElement('tr');
+          if (r.me) tr.style.background = 'rgba(217, 119, 6, 0.14)';
+          [String(idx + 1), r.name, String(r.elo), String(r.pts)].forEach((v) => {
+            const td = document.createElement('td');
+            td.textContent = v;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
 
       function updateFooterVisibility() {
         const showFooter = currentTab === 'play' && !inArena;
         $('homeFooter').classList.toggle('hidden', !showFooter);
       }
 
-      function applyTheme(t) {
-        document.documentElement.style.setProperty('--light-sq', t.light);
-        document.documentElement.style.setProperty('--dark-sq', t.dark);
-        document.querySelectorAll('#themeSwatches .swatch').forEach((el) => {
-          el.classList.toggle('active', el.dataset.tid === t.id);
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('[data-tab]').forEach((b) => {
+          b.classList.toggle('active', b.dataset.tab === tab);
         });
+        $('lobbyView').classList.toggle('hidden', tab !== 'play' || inArena);
+        $('arenaView').classList.toggle('hidden', tab !== 'play' || !inArena);
+        $('adventureView').classList.toggle('hidden', tab !== 'adventure');
+        $('practiceView').classList.toggle('hidden', tab !== 'practice');
+        $('tournamentView').classList.toggle('hidden', tab !== 'tournament');
+        $('leaderboardView').classList.toggle('hidden', tab !== 'leaderboard');
+        $('profileView').classList.toggle('hidden', tab !== 'profile');
+        updateFooterVisibility();
+        if (tab === 'adventure') renderAdventure();
+        if (tab === 'practice') renderPractice();
+        if (tab === 'tournament') renderTournament();
+        if (tab === 'leaderboard') renderLeaderboard();
+        if (tab === 'profile') syncProfileUI();
       }
+
+      document.querySelectorAll('[data-tab]').forEach((btn) => {
+        btn.onclick = () => switchTab(btn.dataset.tab);
+      });
+      $('headerProfileBtn').onclick = () => switchTab('profile');
+      $('brandBtn').onclick = () => {
+        inArena = false;
+        stopClock();
+        switchTab('play');
+      };
+      $('darkToggleBtn').onclick = () => document.documentElement.classList.toggle('dark');
 
       THEMES.forEach((t, i) => {
         const btn = document.createElement('button');
@@ -976,33 +1243,44 @@
         name.textContent = t.name;
         btn.appendChild(bar);
         btn.appendChild(name);
-        btn.onclick = () => applyTheme(t);
+        btn.onclick = () => {
+          document.documentElement.style.setProperty('--light-sq', t.light);
+          document.documentElement.style.setProperty('--dark-sq', t.dark);
+          document.querySelectorAll('#themeSwatches .swatch').forEach((el) => el.classList.toggle('active', el.dataset.tid === t.id));
+        };
         $('themeSwatches').appendChild(btn);
       });
 
-      $('darkToggleBtn').onclick = () => document.documentElement.classList.toggle('dark');
-      $('mobileMenuBtn').onclick = () => $('mobileDrawer').classList.toggle('open');
-
-      function switchTab(tab) {
-        currentTab = tab;
-        $('mobileDrawer').classList.remove('open');
-        document.querySelectorAll('[data-tab]').forEach((b) => {
-          b.classList.toggle('active', b.dataset.tab === tab);
-        });
-        $('lobbyView').classList.toggle('hidden', tab !== 'play' || inArena);
-        $('arenaView').classList.toggle('hidden', tab !== 'play' || !inArena);
-        $('adventureView').classList.toggle('hidden', tab !== 'adventure');
-        updateFooterVisibility();
-        if (tab === 'adventure') renderAdventure();
-      }
-
-      document.querySelectorAll('[data-tab]').forEach((btn) => {
-        btn.onclick = () => switchTab(btn.dataset.tab);
+      AVATARS.forEach((av) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'opt-btn' + (profile.avatar === av ? ' active' : '');
+        b.style.fontSize = '1.2rem';
+        b.textContent = av;
+        b.onclick = () => {
+          profile.avatar = av;
+          $('avatarPicker').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
+        };
+        $('avatarPicker').appendChild(b);
       });
-      $('brandBtn').onclick = () => {
-        inArena = false;
-        stopClock();
-        switchTab('play');
+
+      FRAMES.forEach((fr) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'opt-btn' + (profile.frame === fr ? ' active' : '');
+        b.style.background = fr;
+        b.style.height = '34px';
+        b.onclick = () => {
+          profile.frame = fr;
+          $('framePicker').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
+        };
+        $('framePicker').appendChild(b);
+      });
+
+      $('saveProfBtn').onclick = () => {
+        const nm = $('profNameInput').value.trim();
+        if (nm) profile.name = nm;
+        saveProfile();
       };
 
       $('modeBtns').querySelectorAll('button').forEach((b) => {
@@ -1027,6 +1305,7 @@
       $('diffBtns').querySelectorAll('button').forEach((b) => {
         b.onclick = () => {
           aiDepth = Number(b.dataset.depth);
+          aiElo = Number(b.dataset.elo);
           aiLabel = b.dataset.label;
           $('diffBtns').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
         };
@@ -1061,10 +1340,10 @@
           if (gameOver || !inArena || playChess.history().length === 0) return;
           if (playChess.turn() === 'w') {
             whiteMs = Math.max(0, whiteMs - 1000);
-            if (whiteMs === 0) finishPlay('Waktu Putih Habis — Hitam Menang!');
+            if (whiteMs === 0) finishPlay('b', 'Waktu Putih Habis');
           } else {
             blackMs = Math.max(0, blackMs - 1000);
-            if (blackMs === 0) finishPlay('Waktu Hitam Habis — Putih Menang!');
+            if (blackMs === 0) finishPlay('w', 'Waktu Hitam Habis');
           }
           updateClocks();
         }, 1000);
@@ -1074,9 +1353,9 @@
         const topCol = orientation === 'w' ? 'b' : 'w';
         const botCol = orientation;
         $('topName').textContent =
-          playMode === 'local' ? (topCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : topCol === playerColor ? 'Anda' : 'AI ' + aiLabel;
+          playMode === 'local' ? (topCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : topCol === playerColor ? profile.name : `AI ${aiLabel} (${aiElo})`;
         $('bottomName').textContent =
-          playMode === 'local' ? (botCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : botCol === playerColor ? 'Anda' : 'AI ' + aiLabel;
+          playMode === 'local' ? (botCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : botCol === playerColor ? profile.name : `AI ${aiLabel} (${aiElo})`;
         $('topClock').textContent = fmtTime(topCol === 'w' ? whiteMs : blackMs);
         $('bottomClock').textContent = fmtTime(botCol === 'w' ? whiteMs : blackMs);
         $('topClock').classList.toggle('active', !gameOver && playChess.turn() === topCol);
@@ -1115,9 +1394,7 @@
               cell.appendChild(marker);
             }
 
-            if (piece) {
-              cell.appendChild(createPieceSvg(piece.type, piece.color));
-            }
+            if (piece) cell.appendChild(createPieceSvg(piece.type, piece.color));
 
             if (fi === 0) {
               const rLbl = document.createElement('span');
@@ -1188,7 +1465,7 @@
         aiBusy = true;
         setTimeout(() => {
           const moves = playChess.moves({ verbose: true });
-          if (moves.length === 0) {
+          if (!moves.length) {
             aiBusy = false;
             return;
           }
@@ -1212,17 +1489,40 @@
         }, 140);
       }
 
-      function finishPlay(msg) {
+      function finishPlay(winner, term) {
         gameOver = true;
         stopClock();
         playSound('gameover');
-        $('matchNotice').textContent = msg;
+        if (playMode !== 'local') {
+          const score = winner === 'draw' ? 0.5 : winner === playerColor ? 1 : 0;
+          const expected = 1 / (1 + Math.pow(10, (aiElo - profile.elo) / 400));
+          const delta = Math.round(32 * (score - expected));
+          profile.elo = Math.max(100, profile.elo + delta);
+          if (score === 1) {
+            profile.wins++;
+            profile.coins += 25;
+            if (isTourneyMatch) profile.tourneyPoints += 3;
+          } else if (score === 0.5) {
+            profile.draws++;
+            if (isTourneyMatch) profile.tourneyPoints += 1;
+          } else {
+            profile.losses++;
+          }
+          profile.matches.unshift({
+            res: score === 1 ? 'Menang' : score === 0.5 ? 'Remis' : 'Kalah',
+            opp: `AI ${aiLabel}`,
+            term,
+            delta,
+          });
+          saveProfile();
+        }
+        $('matchNotice').textContent = `${term}!`;
         $('matchNotice').className = 'notice ok';
       }
 
       function afterPlayMove() {
         const hist = playChess.history();
-        if (hist.length === 0) {
+        if (!hist.length) {
           $('moveList').textContent = 'Belum ada langkah.';
         } else {
           let out = '';
@@ -1234,9 +1534,10 @@
         updateClocks();
         renderPlayBoard();
         if (playChess.isCheckmate()) {
-          finishPlay(playChess.turn() === 'w' ? 'Skakmat! Hitam Menang.' : 'Skakmat! Putih Menang.');
+          const w = playChess.turn() === 'w' ? 'b' : 'w';
+          finishPlay(w, w === 'w' ? 'Skakmat · Putih Menang' : 'Skakmat · Hitam Menang');
         } else if (playChess.isDraw()) {
-          finishPlay('Pertandingan Berakhir Remis.');
+          finishPlay('draw', 'Pertandingan Remis');
         } else if (playMode === 'ai' && playChess.turn() !== playerColor) {
           computeAIMove();
         }
@@ -1283,17 +1584,21 @@
             }
           }
           const piece = playChess.get(sq);
-          if (piece && piece.color === playChess.turn() && (playMode === 'local' || piece.color === playerColor)) {
-            selectedSq = selectedSq === sq ? null : sq;
-          } else {
-            selectedSq = null;
-          }
+          selectedSq = piece && piece.color === playChess.turn() && (playMode === 'local' || piece.color === playerColor) ? (selectedSq === sq ? null : sq) : null;
           renderPlayBoard();
         });
       }
 
-      $('startMatchBtn').onclick = () => {
+      function startMatch(tourney = false) {
         unlockAudio();
+        isTourneyMatch = tourney;
+        if (tourney) {
+          playMode = 'ai';
+          aiDepth = 3;
+          aiElo = 1950;
+          aiLabel = 'Turnamen Master';
+          timeSec = 300;
+        }
         playChess = new Chess();
         selectedSq = null;
         lastMove = null;
@@ -1311,8 +1616,10 @@
         renderPlayBoard();
         startClock();
         if (playMode === 'ai' && playerColor === 'b') computeAIMove();
-      };
+      }
 
+      $('startMatchBtn').onclick = () => startMatch(false);
+      $('joinTourneyBtn').onclick = () => startMatch(true);
       $('soundBtn').onclick = () => {
         soundOn = !soundOn;
         $('soundBtn').textContent = soundOn ? 'Suara: Nyala' : 'Suara: Mati';
@@ -1328,14 +1635,12 @@
         if (playMode === 'ai') {
           playChess.undo();
           playChess.undo();
-        } else {
-          playChess.undo();
-        }
+        } else playChess.undo();
         selectedSq = null;
         afterPlayMove();
       };
       $('resignBtn').onclick = () => {
-        if (!gameOver) finishPlay('Pemain Menyerah.');
+        if (!gameOver) finishPlay(playerColor === 'w' ? 'b' : 'w', 'Pemain Menyerah');
       };
       $('backLobbyBtn').onclick = () => {
         inArena = false;
@@ -1347,16 +1652,16 @@
       $('fsBtn').onclick = () => {
         isFullscreen = !isFullscreen;
         $('arenaView').classList.toggle('fullscreen-arena', isFullscreen);
-        $('fsBtn').textContent = isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh';
+        $('fsBtn').textContent = isFullscreen ? 'Keluar' : 'Layar Penuh';
       };
 
-      // ADVENTURE LOGIC
+      // ADVENTURE
       function renderAdventure() {
         const st = ADVENTURE_STAGES[advIdx];
         $('advMeta').textContent = `${st.chapter} · Tahap ${st.stage} · ${st.diff} (Elo ${st.elo})`;
         $('advTitle').textContent = st.title;
         $('advObjective').textContent = `Misi: ${st.obj}`;
-        $('advProgressLabel').textContent = `Peta Perjalanan (${advSolved.length}/${ADVENTURE_STAGES.length})`;
+        $('advProgressLabel').textContent = `Peta Petualangan (${advSolved.length}/${ADVENTURE_STAGES.length})`;
         $('advNextBtn').classList.toggle('hidden', advStatus !== 'cleared' || advIdx + 1 >= ADVENTURE_STAGES.length);
 
         const listEl = $('advStageList');
@@ -1367,9 +1672,9 @@
           btn.className = 'stage-item' + (idx === advIdx ? ' active' : '');
           btn.disabled = item.stage > advUnlocked;
           const left = document.createElement('span');
-          left.textContent = `${item.stage}. ${item.title} (${item.diff})`;
+          left.textContent = `${item.stage}. ${item.title}`;
           const right = document.createElement('span');
-          right.textContent = advSolved.includes(item.stage) ? '✓ Selesai' : item.stage > advUnlocked ? 'Terkunci' : `Elo ${item.elo}`;
+          right.textContent = advSolved.includes(item.stage) ? '✓' : item.stage > advUnlocked ? '🔒' : `${item.diff}`;
           btn.appendChild(left);
           btn.appendChild(right);
           btn.onclick = () => selectAdvStage(idx);
@@ -1381,8 +1686,7 @@
 
       function selectAdvStage(idx) {
         advIdx = idx;
-        const st = ADVENTURE_STAGES[idx];
-        advChess = new Chess(st.fen);
+        advChess = new Chess(ADVENTURE_STAGES[idx].fen);
         advStep = 0;
         advSelected = null;
         advLast = null;
@@ -1404,7 +1708,7 @@
           advChess.undo();
           advStatus = 'wrong';
           playSound('check');
-          $('advNotice').textContent = 'Langkah kurang tepat. Coba langkah lain atau lihat Petunjuk.';
+          $('advNotice').textContent = 'Langkah kurang tepat.';
           $('advNotice').className = 'notice err';
           renderAdventure();
           return;
@@ -1459,8 +1763,7 @@
       }
 
       $('advHintBtn').onclick = () => {
-        const st = ADVENTURE_STAGES[advIdx];
-        $('advNotice').textContent = `Petunjuk: ${st.hint}`;
+        $('advNotice').textContent = `Petunjuk: ${ADVENTURE_STAGES[advIdx].hint}`;
         $('advNotice').className = 'notice hint';
       };
       $('advResetBtn').onclick = () => selectAdvStage(advIdx);
@@ -1468,6 +1771,41 @@
         if (advIdx + 1 < ADVENTURE_STAGES.length) selectAdvStage(advIdx + 1);
       };
 
+      // PRACTICE SANDBOX
+      function renderPractice() {
+        const hist = pracChess.history();
+        $('pracMoves').textContent = hist.length ? hist.join(' · ') : 'Belum ada langkah.';
+        renderBoard($('pracBoard'), pracChess, 'w', pracSelected, pracLast, (sq) => {
+          unlockAudio();
+          if (pracSelected) {
+            const legal = pracChess.moves({ square: pracSelected, verbose: true }).filter((m) => m.to === sq);
+            if (legal.length > 0) {
+              const res = pracChess.move({ from: pracSelected, to: sq, promotion: legal[0].promotion ? 'q' : undefined });
+              pracLast = { from: res.from, to: res.to };
+              pracSelected = null;
+              playSound(res.captured ? 'capture' : pracChess.inCheck() ? 'check' : 'move');
+              renderPractice();
+              return;
+            }
+          }
+          const piece = pracChess.get(sq);
+          pracSelected = piece && piece.color === pracChess.turn() ? (pracSelected === sq ? null : sq) : null;
+          renderPractice();
+        });
+      }
+      $('pracUndoBtn').onclick = () => {
+        pracChess.undo();
+        pracSelected = null;
+        renderPractice();
+      };
+      $('pracResetBtn').onclick = () => {
+        pracChess = new Chess();
+        pracSelected = null;
+        pracLast = null;
+        renderPractice();
+      };
+
+      syncProfileUI();
       updateFooterVisibility();
     </script>
   </body>
