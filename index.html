@@ -722,6 +722,12 @@
 
       <!-- ADVENTURE -->
       <section id="adventureView" class="hidden">
+        <div id="advTopBanner" class="notice ok hidden" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap">
+          <span id="advTopBannerText" style="font-weight: 700"></span>
+          <button type="button" class="secondary-btn" id="advTopNextBtn" style="background: var(--accent); color: #fff; border-color: var(--accent)">
+            Lanjut Tahap Berikutnya →
+          </button>
+        </div>
         <div class="arena-grid">
           <div class="board-wrap">
             <div style="position: relative">
@@ -745,7 +751,7 @@
                 <button type="button" class="secondary-btn" id="advHintBtn">Petunjuk</button>
                 <button type="button" class="secondary-btn" id="advResetBtn">Ulangi</button>
                 <button type="button" class="secondary-btn hidden" id="advNextBtn" style="background: var(--accent); color: #fff; border-color: var(--accent)">
-                  Berikutnya
+                  Tahap Berikutnya →
                 </button>
               </div>
             </div>
@@ -856,22 +862,46 @@
       const AVATARS = ['♔', '♕', '♘', '♗', '♖'];
       const FRAMES = ['#d97706', '#10b981', '#3b82f6', '#e11d48', '#8b5cf6'];
 
-      let profile = JSON.parse(localStorage.getItem('cgs_html_profile_v2') || 'null') || {
-        name: 'Pemain Solo',
-        avatar: '♔',
-        frame: '#d97706',
-        title: 'Penantang Baru',
-        elo: 1200,
-        wins: 0,
-        draws: 0,
-        losses: 0,
-        coins: 100,
-        tourneyPoints: 0,
-        matches: [],
-      };
+      const memoryStorage = {};
+      function safeGet(key, fallback) {
+        try {
+          const val = window.localStorage.getItem(key);
+          return val !== null ? val : fallback;
+        } catch {
+          return Object.prototype.hasOwnProperty.call(memoryStorage, key) ? memoryStorage[key] : fallback;
+        }
+      }
+      function safeSet(key, val) {
+        memoryStorage[key] = val;
+        try {
+          window.localStorage.setItem(key, val);
+        } catch {}
+      }
+
+      let profile;
+      try {
+        profile = JSON.parse(safeGet('cgs_html_profile_v2', 'null')) || null;
+      } catch {
+        profile = null;
+      }
+      if (!profile) {
+        profile = {
+          name: 'Pemain Solo',
+          avatar: '♔',
+          frame: '#d97706',
+          title: 'Penantang Baru',
+          elo: 1200,
+          wins: 0,
+          draws: 0,
+          losses: 0,
+          coins: 100,
+          tourneyPoints: 0,
+          matches: [],
+        };
+      }
 
       function saveProfile() {
-        localStorage.setItem('cgs_html_profile_v2', JSON.stringify(profile));
+        safeSet('cgs_html_profile_v2', JSON.stringify(profile));
         syncProfileUI();
       }
 
@@ -1095,18 +1125,27 @@
       let whiteMs = 300000;
       let blackMs = 300000;
       let timerHandle = null;
+      let lastTickAt = Date.now();
       let isFullscreen = false;
       let gameOver = false;
       let aiBusy = false;
 
-      let advUnlocked = Number(localStorage.getItem('cgs_html_adv_unlocked') || '1');
-      let advSolved = JSON.parse(localStorage.getItem('cgs_html_adv_solved') || '[]');
+      let advUnlocked = Math.max(1, Math.min(ADVENTURE_STAGES.length, Number(safeGet('cgs_html_adv_unlocked', '1')) || 1));
+      let advSolved = [];
+      try {
+        const parsedSolved = JSON.parse(safeGet('cgs_html_adv_solved', '[]'));
+        if (Array.isArray(parsedSolved)) advSolved = parsedSolved;
+      } catch {
+        advSolved = [];
+      }
       let advIdx = Math.min(ADVENTURE_STAGES.length - 1, Math.max(0, advUnlocked - 1));
       let advChess = new Chess(ADVENTURE_STAGES[advIdx].fen);
       let advStep = 0;
       let advSelected = null;
       let advLast = null;
       let advStatus = 'playing';
+      let advBusy = false;
+      let advSession = 0;
 
       let pracChess = new Chess();
       let pracSelected = null;
@@ -1336,17 +1375,21 @@
       function startClock() {
         stopClock();
         if (timeSec === 0) return;
+        lastTickAt = Date.now();
         timerHandle = setInterval(() => {
+          const now = Date.now();
+          const elapsed = Math.max(0, now - lastTickAt);
+          lastTickAt = now;
           if (gameOver || !inArena || playChess.history().length === 0) return;
           if (playChess.turn() === 'w') {
-            whiteMs = Math.max(0, whiteMs - 1000);
+            whiteMs = Math.max(0, whiteMs - elapsed);
             if (whiteMs === 0) finishPlay('b', 'Waktu Putih Habis');
           } else {
-            blackMs = Math.max(0, blackMs - 1000);
+            blackMs = Math.max(0, blackMs - elapsed);
             if (blackMs === 0) finishPlay('w', 'Waktu Hitam Habis');
           }
           updateClocks();
-        }, 1000);
+        }, 250);
       }
 
       function updateClocks() {
@@ -1417,8 +1460,6 @@
 
       const PVAL = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
       function evalPos(c) {
-        if (c.isCheckmate()) return c.turn() === 'w' ? -99999 : 99999;
-        if (c.isDraw()) return 0;
         let score = 0;
         const b = c.board();
         for (let r = 0; r < 8; r++) {
@@ -1433,17 +1474,28 @@
         return score;
       }
 
-      function minimax(c, depth, alpha, beta, maxing) {
-        if (depth === 0 || c.isGameOver()) return evalPos(c);
+      function minimax(c, depth, alpha, beta, maxing, searchCtx) {
+        searchCtx.nodes++;
+        if ((searchCtx.nodes & 63) === 0 && performance.now() > searchCtx.deadline) {
+          searchCtx.aborted = true;
+          return 0;
+        }
+        if (depth === 0) return evalPos(c);
         const moves = c.moves({ verbose: true });
+        if (moves.length === 0) {
+          if (c.inCheck()) return maxing ? -99999 - depth : 99999 + depth;
+          return 0;
+        }
         moves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
         if (maxing) {
           let best = -Infinity;
           for (const m of moves) {
             c.move(m);
-            best = Math.max(best, minimax(c, depth - 1, alpha, beta, false));
+            const val = minimax(c, depth - 1, alpha, beta, false, searchCtx);
             c.undo();
-            alpha = Math.max(alpha, best);
+            if (searchCtx.aborted) return 0;
+            if (val > best) best = val;
+            if (best > alpha) alpha = best;
             if (beta <= alpha) break;
           }
           return best;
@@ -1451,9 +1503,11 @@
           let best = Infinity;
           for (const m of moves) {
             c.move(m);
-            best = Math.min(best, minimax(c, depth - 1, alpha, beta, true));
+            const val = minimax(c, depth - 1, alpha, beta, true, searchCtx);
             c.undo();
-            beta = Math.min(beta, best);
+            if (searchCtx.aborted) return 0;
+            if (val < best) best = val;
+            if (best < beta) beta = best;
             if (beta <= alpha) break;
           }
           return best;
@@ -1463,30 +1517,53 @@
       function computeAIMove() {
         if (gameOver || playMode !== 'ai' || playChess.turn() === playerColor) return;
         aiBusy = true;
+        const targetFen = playChess.fen();
         setTimeout(() => {
-          const moves = playChess.moves({ verbose: true });
-          if (!moves.length) {
-            aiBusy = false;
-            return;
-          }
-          const maxing = playChess.turn() === 'w';
-          let bestMove = moves[0];
-          let bestScore = maxing ? -Infinity : Infinity;
-          for (const m of moves) {
-            playChess.move(m);
-            const sc = minimax(playChess, aiDepth - 1, -Infinity, Infinity, !maxing);
-            playChess.undo();
-            if ((maxing && sc > bestScore) || (!maxing && sc < bestScore)) {
-              bestScore = sc;
-              bestMove = m;
+          try {
+            const clone = new Chess(targetFen);
+            const moves = clone.moves({ verbose: true });
+            if (!moves.length) {
+              aiBusy = false;
+              afterPlayMove();
+              return;
             }
+            const maxing = clone.turn() === 'w';
+            const searchCtx = { deadline: performance.now() + 550, nodes: 0, aborted: false };
+            let bestMove = moves[0];
+
+            for (let d = 1; d <= aiDepth; d++) {
+              let iterBest = bestMove;
+              let iterScore = maxing ? -Infinity : Infinity;
+              for (const m of moves) {
+                clone.move(m);
+                const sc = minimax(clone, d - 1, -Infinity, Infinity, !maxing, searchCtx);
+                clone.undo();
+                if (searchCtx.aborted) break;
+                if ((maxing && sc > iterScore) || (!maxing && sc < iterScore)) {
+                  iterScore = sc;
+                  iterBest = m;
+                }
+              }
+              if (!searchCtx.aborted) bestMove = iterBest;
+              else break;
+            }
+
+            const res = playChess.move({ from: bestMove.from, to: bestMove.to, promotion: bestMove.promotion });
+            lastMove = { from: res.from, to: res.to };
+            lastTickAt = Date.now();
+            playSound(playChess.inCheck() ? 'check' : res.captured ? 'capture' : res.san.startsWith('O-O') ? 'castle' : 'move');
+          } catch (err) {
+            console.error('AI fallback:', err);
+            const legal = playChess.moves({ verbose: true });
+            if (legal.length) {
+              const res = playChess.move(legal[0]);
+              lastMove = { from: res.from, to: res.to };
+            }
+          } finally {
+            aiBusy = false;
+            afterPlayMove();
           }
-          const res = playChess.move(bestMove);
-          lastMove = { from: res.from, to: res.to };
-          playSound(playChess.inCheck() ? 'check' : res.captured ? 'capture' : res.san.startsWith('O-O') ? 'castle' : 'move');
-          aiBusy = false;
-          afterPlayMove();
-        }, 140);
+        }, 120);
       }
 
       function finishPlay(winner, term) {
@@ -1662,7 +1739,13 @@
         $('advTitle').textContent = st.title;
         $('advObjective').textContent = `Misi: ${st.obj}`;
         $('advProgressLabel').textContent = `Peta Petualangan (${advSolved.length}/${ADVENTURE_STAGES.length})`;
-        $('advNextBtn').classList.toggle('hidden', advStatus !== 'cleared' || advIdx + 1 >= ADVENTURE_STAGES.length);
+        const hasNext = advStatus === 'cleared' && advIdx + 1 < ADVENTURE_STAGES.length;
+        $('advNextBtn').classList.toggle('hidden', !hasNext);
+        $('advTopBanner').classList.toggle('hidden', advStatus !== 'cleared');
+        $('advTopBannerText').textContent = hasNext
+          ? `Tahap ${st.stage} Selesai!`
+          : 'Luar Biasa! Semua Tahap Grandmaster Ditaklukkan!';
+        $('advTopNextBtn').classList.toggle('hidden', !hasNext);
 
         const listEl = $('advStageList');
         listEl.textContent = '';
@@ -1681,21 +1764,25 @@
           listEl.appendChild(btn);
         });
 
-        renderBoard($('advBoard'), advChess, 'w', advSelected, advLast, handleAdvSquareClick);
+        const startTurn = new Chess(st.fen).turn();
+        renderBoard($('advBoard'), advChess, startTurn, advSelected, advLast, handleAdvSquareClick);
       }
 
       function selectAdvStage(idx) {
+        advSession++;
         advIdx = idx;
         advChess = new Chess(ADVENTURE_STAGES[idx].fen);
         advStep = 0;
         advSelected = null;
         advLast = null;
         advStatus = 'playing';
+        advBusy = false;
         $('advNotice').className = 'notice hidden';
         renderAdventure();
       }
 
       function applyAdvMove(from, to, promotion) {
+        if (advBusy || advStatus === 'cleared') return;
         const st = ADVENTURE_STAGES[advIdx];
         let moved;
         try {
@@ -1704,11 +1791,12 @@
           return;
         }
         const uci = moved.from + moved.to + (moved.promotion || '');
-        if (uci !== st.sol[advStep]) {
+        const isMateInOneBonus = st.sol.length === 1 && advChess.isCheckmate();
+        if (uci !== st.sol[advStep] && !isMateInOneBonus) {
           advChess.undo();
           advStatus = 'wrong';
           playSound('check');
-          $('advNotice').textContent = 'Langkah kurang tepat.';
+          $('advNotice').textContent = 'Langkah kurang tepat. Coba langkah lain atau tekan Petunjuk.';
           $('advNotice').className = 'notice err';
           renderAdventure();
           return;
@@ -1716,34 +1804,43 @@
         playSound(moved.captured ? 'capture' : advChess.inCheck() ? 'check' : 'move');
         advLast = { from: moved.from, to: moved.to };
         advStep++;
-        if (advStep >= st.sol.length) {
+        if (advStep >= st.sol.length || isMateInOneBonus) {
           advStatus = 'cleared';
           playSound('gameover');
           if (!advSolved.includes(st.stage)) advSolved.push(st.stage);
           advUnlocked = Math.min(ADVENTURE_STAGES.length, Math.max(advUnlocked, st.stage + 1));
-          localStorage.setItem('cgs_html_adv_solved', JSON.stringify(advSolved));
-          localStorage.setItem('cgs_html_adv_unlocked', String(advUnlocked));
+          safeSet('cgs_html_adv_solved', JSON.stringify(advSolved));
+          safeSet('cgs_html_adv_unlocked', String(advUnlocked));
           $('advNotice').textContent = `Berhasil! ${st.exp}`;
           $('advNotice').className = 'notice ok';
           renderAdventure();
           return;
         }
         $('advNotice').className = 'notice hidden';
+        advBusy = true;
+        const sessionSnapshot = advSession;
         renderAdventure();
         setTimeout(() => {
+          if (advSession !== sessionSnapshot) return;
           const rep = st.sol[advStep];
-          if (!rep) return;
-          const rMoved = advChess.move({ from: rep.slice(0, 2), to: rep.slice(2, 4), promotion: rep[4] || undefined });
-          playSound(rMoved.captured ? 'capture' : 'move');
-          advLast = { from: rMoved.from, to: rMoved.to };
-          advStep++;
+          if (!rep) {
+            advBusy = false;
+            return;
+          }
+          try {
+            const rMoved = advChess.move({ from: rep.slice(0, 2), to: rep.slice(2, 4), promotion: rep[4] || undefined });
+            playSound(rMoved.captured ? 'capture' : 'move');
+            advLast = { from: rMoved.from, to: rMoved.to };
+            advStep++;
+          } catch {}
+          advBusy = false;
           renderAdventure();
         }, 320);
       }
 
       function handleAdvSquareClick(sq) {
         unlockAudio();
-        if (advStatus === 'cleared') return;
+        if (advStatus === 'cleared' || advBusy) return;
         if (advSelected) {
           const legal = advChess.moves({ square: advSelected, verbose: true }).filter((m) => m.to === sq);
           if (legal.length > 0) {
@@ -1767,9 +1864,14 @@
         $('advNotice').className = 'notice hint';
       };
       $('advResetBtn').onclick = () => selectAdvStage(advIdx);
-      $('advNextBtn').onclick = () => {
-        if (advIdx + 1 < ADVENTURE_STAGES.length) selectAdvStage(advIdx + 1);
+      const goNextAdventure = () => {
+        if (advIdx + 1 < ADVENTURE_STAGES.length) {
+          advUnlocked = Math.max(advUnlocked, ADVENTURE_STAGES[advIdx + 1].stage);
+          selectAdvStage(advIdx + 1);
+        }
       };
+      $('advNextBtn').onclick = goNextAdventure;
+      $('advTopNextBtn').onclick = goNextAdventure;
 
       // PRACTICE SANDBOX
       function renderPractice() {
