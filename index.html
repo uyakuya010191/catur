@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="id" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Catur Geng Solo — Permainan Catur &amp; Mode Adventure</title>
+    <meta
+      name="description"
+      content="Catur Geng Solo: mainkan catur melawan AI hingga tingkat Grandmaster, laga 2 pemain lokal, dan taklukkan Mode Adventure studi catur legendaris."
+    />
+    <meta property="og:title" content="Catur Geng Solo" />
+    <meta
+      property="og:description"
+      content="Mainkan catur melawan AI hingga tingkat Grandmaster atau pecahkan teka-teki Mode Adventure bertahap di PC maupun Android."
+    />
+    <meta property="og:type" content="website" />
+    <style>
+      :root {
+        --bg: #f6f5f1;
+        --card: #ffffff;
+        --card-alt: #f1efe9;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2dfd7;
+        --accent: #d97706;
+        --accent-hover: #f59e0b;
+        --light-sq: #eed7b5;
+        --dark-sq: #b4845a;
+      }
+      html.dark {
+        --bg: #0e1217;
+        --card: #171c24;
+        --card-alt: #11161d;
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --border: #242c38;
+        --accent: #d97706;
+        --accent-hover: #f59e0b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-bar {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 16px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 1.05rem;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        padding: 0;
+      }
+      .top-menu {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .top-menu::-webkit-scrollbar {
+        display: none;
+      }
+      .menu-btn {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .menu-btn.active {
+        background: rgba(217, 119, 6, 0.14);
+        color: #f59e0b;
+      }
+      .theme-toggle {
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 7px 11px;
+        border-radius: 10px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      @media (max-width: 680px) {
+        .nav-bar {
+          height: 46px;
+          padding: 0 12px;
+        }
+        .mobile-sub-menu {
+          display: flex !important;
+          gap: 4px;
+          padding: 6px 10px;
+          border-top: 1px solid var(--border);
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .desktop-only-menu {
+          display: none !important;
+        }
+      }
+      .mobile-sub-menu {
+        display: none;
+      }
+      main {
+        flex: 1;
+        max-width: 1120px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 16px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .arena-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 540px) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .grid-2,
+        .arena-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.6rem;
+        line-height: 1.25;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 1.15rem;
+      }
+      p.muted {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin: 0 0 14px;
+      }
+      .label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .btn-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .btn-grid-5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      @media (max-width: 520px) {
+        .btn-grid-5 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .opt-btn {
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+      }
+      .opt-btn.active {
+        border-color: var(--accent);
+        background: rgba(217, 119, 6, 0.14);
+        color: #f59e0b;
+      }
+      .primary-btn {
+        width: 100%;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.92rem;
+        font-weight: 700;
+        padding: 13px 16px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+      .primary-btn:hover {
+        background: var(--accent-hover);
+      }
+      .secondary-btn {
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 9px 13px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .board-wrap {
+        width: 100%;
+        max-width: 540px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid var(--border);
+        user-select: none;
+        touch-action: manipulation;
+      }
+      .sq {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: clamp(22px, 6.2vw, 44px);
+        line-height: 1;
+      }
+      .sq.light {
+        background: var(--light-sq);
+      }
+      .sq.dark {
+        background: var(--dark-sq);
+      }
+      .sq.selected {
+        box-shadow: inset 0 0 0 3px #f59e0b;
+      }
+      .sq.last-move::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(245, 158, 11, 0.28);
+        pointer-events: none;
+      }
+      .sq.in-check {
+        background: radial-gradient(circle, rgba(225, 29, 72, 0.85), rgba(225, 29, 72, 0.25)) !important;
+      }
+      .sq.hint-from {
+        box-shadow: inset 0 0 0 3px #10b981;
+      }
+      .legal-dot {
+        width: 28%;
+        height: 28%;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.28);
+        pointer-events: none;
+        z-index: 2;
+      }
+      .legal-cap {
+        position: absolute;
+        inset: 7%;
+        border-radius: 50%;
+        border: 3px solid rgba(15, 23, 42, 0.34);
+        pointer-events: none;
+        z-index: 2;
+      }
+      .piece {
+        z-index: 3;
+        pointer-events: none;
+        filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+      }
+      .piece.w {
+        color: #ffffff;
+        text-shadow: 0 0 2px #0f172a, 0 1px 2px rgba(0, 0, 0, 0.6);
+      }
+      .piece.b {
+        color: #111827;
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.35);
+      }
+      .coord-file {
+        position: absolute;
+        right: 3px;
+        bottom: 2px;
+        font-size: 9px;
+        font-weight: 700;
+        opacity: 0.65;
+        color: #0f172a;
+        pointer-events: none;
+      }
+      .coord-rank {
+        position: absolute;
+        left: 3px;
+        top: 2px;
+        font-size: 9px;
+        font-weight: 700;
+        opacity: 0.65;
+        color: #0f172a;
+        pointer-events: none;
+      }
+      .player-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 12px;
+        border-radius: 10px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        margin: 8px 0;
+        font-size: 0.88rem;
+        font-weight: 700;
+      }
+      .clock {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        padding: 4px 10px;
+        border-radius: 8px;
+        background: var(--card-alt);
+      }
+      .clock.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      .moves-box {
+        max-height: 240px;
+        overflow-y: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.82rem;
+        background: var(--card-alt);
+        border-radius: 10px;
+        padding: 10px;
+        line-height: 1.7;
+      }
+      .stage-list {
+        max-height: 310px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .stage-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        font-size: 0.82rem;
+        text-align: left;
+        cursor: pointer;
+      }
+      .stage-item.active {
+        border-color: var(--accent);
+        background: rgba(217, 119, 6, 0.14);
+      }
+      .stage-item:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .notice {
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.82rem;
+        margin-bottom: 10px;
+      }
+      .notice.ok {
+        background: rgba(16, 185, 129, 0.14);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #34d399;
+      }
+      .notice.err {
+        background: rgba(244, 63, 94, 0.14);
+        border: 1px solid rgba(244, 63, 94, 0.35);
+        color: #fb7185;
+      }
+      .notice.hint {
+        background: rgba(245, 158, 11, 0.14);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        color: #fbbf24;
+      }
+      .promo-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        border-radius: 12px;
+      }
+      .promo-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        text-align: center;
+      }
+      .promo-btns {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .promo-btns button {
+        width: 48px;
+        height: 48px;
+        font-size: 28px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card-alt);
+        color: var(--text);
+        cursor: pointer;
+      }
+      .fullscreen-arena {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: var(--bg);
+        overflow-y: auto;
+        padding: 14px;
+      }
+      .theme-swatch-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .swatch {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 6px;
+        background: var(--card-alt);
+        color: var(--text);
+        font-size: 0.76rem;
+        cursor: pointer;
+      }
+      .swatch.active {
+        border-color: var(--accent);
+      }
+      .swatch-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 18px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 4px;
+      }
+      footer {
+        text-align: center;
+        padding: 12px 16px;
+        font-size: 11px;
+        color: var(--muted);
+        opacity: 0.8;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  <script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
+  <body>
+    <header id="appHeader">
+      <div class="nav-bar">
+        <button type="button" class="brand" id="brandBtn">Catur Geng Solo</button>
+        <nav class="top-menu desktop-only-menu" aria-label="Menu Utama">
+          <button type="button" class="menu-btn active" data-tab="play">Bermain</button>
+          <button type="button" class="menu-btn" data-tab="adventure">Adventure</button>
+        </nav>
+        <button type="button" class="theme-toggle" id="darkToggleBtn">Terang / Gelap</button>
+      </div>
+      <nav class="mobile-sub-menu" aria-label="Menu Atas Mobile">
+        <button type="button" class="menu-btn active" data-tab="play">Bermain</button>
+        <button type="button" class="menu-btn" data-tab="adventure">Adventure</button>
+      </nav>
+    </header>
+
+    <main id="mainArea">
+      <!-- LOBBY / INITIAL SCREEN -->
+      <section id="lobbyView" class="grid-2">
+        <div class="card">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; margin-bottom: 6px">
+            Papan Catur Mandiri · PC &amp; Android
+          </div>
+          <h1>Selamat Datang di Catur Geng Solo</h1>
+          <p class="muted">
+            Mainkan laga cepat 3 menit hingga klasik 1 jam melawan mesin AI adaptif sampai tingkat Grandmaster, tantang teman dalam mode 2 pemain lokal, atau pecahkan teka-teki Mode Adventure.
+          </p>
+
+          <span class="label">Tema Papan Catur</span>
+          <div class="theme-swatch-grid" id="themeSwatches"></div>
+        </div>
+
+        <div class="card">
+          <h2>Atur Pertandingan</h2>
+
+          <span class="label">Mode Permainan</span>
+          <div class="btn-row" id="modeBtns">
+            <button type="button" class="opt-btn active" data-mode="ai">Lawan AI</button>
+            <button type="button" class="opt-btn" data-mode="local">Lokal 2P</button>
+            <button type="button" class="opt-btn" data-go-adv="1">Mode Adventure</button>
+          </div>
+
+          <span class="label">Durasi Bermain</span>
+          <div class="btn-grid-5" id="timeBtns">
+            <button type="button" class="opt-btn" data-sec="180">3m</button>
+            <button type="button" class="opt-btn active" data-sec="300">5m</button>
+            <button type="button" class="opt-btn" data-sec="600">10m</button>
+            <button type="button" class="opt-btn" data-sec="3600">60m</button>
+            <button type="button" class="opt-btn" data-sec="0">Bebas</button>
+          </div>
+
+          <div id="aiConfigWrap">
+            <span class="label">Kekuatan AI</span>
+            <div class="btn-grid-5" id="diffBtns">
+              <button type="button" class="opt-btn" data-depth="1" data-label="Pemula (800)">Pemula</button>
+              <button type="button" class="opt-btn" data-depth="2" data-label="Santai (1150)">Santai</button>
+              <button type="button" class="opt-btn active" data-depth="2" data-smart="1" data-label="Klub (1500)">Klub</button>
+              <button type="button" class="opt-btn" data-depth="3" data-label="Master (1950)">Master</button>
+              <button type="button" class="opt-btn" data-depth="3" data-gm="1" data-label="GM (2300)">GM</button>
+            </div>
+
+            <span class="label">Pilih Warna</span>
+            <div class="btn-row" id="colorBtns">
+              <button type="button" class="opt-btn active" data-col="w">Putih</button>
+              <button type="button" class="opt-btn" data-col="random">Acak</button>
+              <button type="button" class="opt-btn" data-col="b">Hitam</button>
+            </div>
+          </div>
+
+          <button type="button" class="primary-btn" id="startMatchBtn">Mulai Pertandingan</button>
+        </div>
+      </section>
+
+      <!-- ACTIVE MATCH ARENA -->
+      <section id="arenaView" class="hidden">
+        <div class="arena-grid">
+          <div class="board-wrap">
+            <div class="player-strip">
+              <span id="topName">AI Klub</span>
+              <span class="clock" id="topClock">05:00</span>
+            </div>
+            <div style="position: relative">
+              <div class="board" id="playBoard"></div>
+              <div class="promo-overlay hidden" id="playPromo">
+                <div class="promo-box">
+                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi Bidak</div>
+                  <div class="promo-btns" id="playPromoBtns"></div>
+                </div>
+              </div>
+            </div>
+            <div class="player-strip">
+              <span id="bottomName">Anda</span>
+              <span class="clock" id="bottomClock">05:00</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px">
+              <button type="button" class="secondary-btn" id="fsBtn">Layar Penuh</button>
+              <button type="button" class="secondary-btn" id="flipBtn">Putar Papan</button>
+              <button type="button" class="secondary-btn" id="undoBtn">Urungkan</button>
+              <button type="button" class="secondary-btn" id="resignBtn">Menyerah</button>
+              <button type="button" class="secondary-btn" id="backLobbyBtn">Kembali ke Lobi</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Status &amp; Riwayat Langkah</h2>
+            <div id="matchNotice" class="notice hidden"></div>
+            <div class="moves-box" id="moveList">Belum ada langkah.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADVENTURE MODE -->
+      <section id="adventureView" class="hidden">
+        <div class="arena-grid">
+          <div class="board-wrap">
+            <div style="position: relative">
+              <div class="board" id="advBoard"></div>
+              <div class="promo-overlay hidden" id="advPromo">
+                <div class="promo-box">
+                  <div style="font-size: 0.85rem; font-weight: 700">Pilih Promosi Bidak</div>
+                  <div class="promo-btns" id="advPromoBtns"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div class="card">
+              <div id="advMeta" style="font-size: 0.78rem; color: var(--muted); font-weight: 700"></div>
+              <h2 id="advTitle" style="margin-top: 4px"></h2>
+              <p id="advObjective" style="font-size: 0.9rem; font-weight: 600; color: #f59e0b; margin: 0 0 12px"></p>
+              <div id="advNotice" class="notice hidden"></div>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                <button type="button" class="secondary-btn" id="advHintBtn">Petunjuk</button>
+                <button type="button" class="secondary-btn" id="advResetBtn">Ulangi Tahap</button>
+                <button type="button" class="secondary-btn hidden" id="advNextBtn" style="background: var(--accent); color: #fff; border-color: var(--accent)">
+                  Tahap Berikutnya
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2 id="advProgressLabel">Peta Perjalanan (0/12)</h2>
+              <div class="stage-list" id="advStageList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="homeFooter">Dibuat oleh Arif Marseno</footer>
+
+    <script type="module">
+      import { Chess } from 'https://esm.sh/chess.js@1.4.0';
+
+      const THEMES = [
+        { id: 'wood', name: 'Kayu Klasik', light: '#EED7B5', dark: '#B4845A' },
+        { id: 'emerald', name: 'Zamrud Turnamen', light: '#EEEED2', dark: '#769656' },
+        { id: 'slate', name: 'Batu Sabak', light: '#CBD5E1', dark: '#475569' },
+        { id: 'marble', name: 'Marmer Karara', light: '#F3F4F6', dark: '#6B7280' },
+        { id: 'ocean', name: 'Samudra Malam', light: '#D8E3EC', dark: '#4A7396' },
+        { id: 'gold', name: 'Emas Kerajaan', light: '#F5E6C8', dark: '#8C6239' },
+      ];
+
+      const UNICODE_PIECES = {
+        wp: '♙', wn: '♘', wb: '♗', wr: '♖', wq: '♕', wk: '♔',
+        bp: '♟', bn: '♞', bb: '♝', br: '♜', bq: '♛', bk: '♚',
+      };
+
+      const ADVENTURE_STAGES = [
+        { stage: 1, chapter: 'Babak I · Desa Bidak', title: 'Gerbang Koridor', diff: 'Pemula', elo: 750, fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', sol: ['d1d8'], obj: 'Skakmat dalam 1 langkah', hint: 'Raja Hitam terperangkap oleh ketiga bidaknya di baris kedelapan.', exp: '1. Rd8# langsung menutup jalur pelarian Raja Hitam.' },
+        { stage: 2, chapter: 'Babak I · Desa Bidak', title: 'Tandem Arab Klasik', diff: 'Pemula', elo: 900, fen: '7k/1R6/5N2/8/8/8/8/6K1 w - - 0 1', sol: ['b7h7'], obj: 'Skakmat dalam 1 langkah', hint: 'Kuda f6 sudah menjaga petak g8 sekaligus melindungi benteng di h7.', exp: '1. Rh7# adalah pola Skakmat Arab.' },
+        { stage: 3, chapter: 'Babak I · Desa Bidak', title: 'Baterai Ratu & Gajah', diff: 'Dasar', elo: 1050, fen: '6k1/5ppp/8/8/8/2B5/5PPP/4Q1K1 w - - 0 1', sol: ['e1e8'], obj: 'Skakmat dalam 1 langkah', hint: 'Dorong Menteri ke baris belakang.', exp: '1. Qe8# mengakhiri perlawanan Raja Hitam.' },
+        { stage: 4, chapter: 'Babak II · Lembah Taktik', title: 'Tusuk Sate Agung', diff: 'Menengah', elo: 1250, fen: '1k6/8/8/4q3/8/8/8/2B3K1 w - - 0 1', sol: ['c1f4'], obj: 'Menangkan Menteri Hitam', hint: 'Menteri dan Raja Hitam berdiri pada diagonal terang.', exp: '1. Bf4+ menusuk Menteri e5 langsung ke Raja b8.' },
+        { stage: 5, chapter: 'Babak II · Lembah Taktik', title: 'Skakmat Tercekik', diff: 'Menengah', elo: 1450, fen: '5r1k/6pp/7N/8/8/1Q6/8/6K1 w - - 0 1', sol: ['b3g8', 'f8g8', 'h6f7'], obj: 'Skakmat dalam 2 langkah', hint: 'Korbankan Menteri di g8 agar Benteng menyumbat Rajanya.', exp: '1. Qg8+!! Rxg8 2. Nf7# menghasilkan Smothered Mate.' },
+        { stage: 6, chapter: 'Babak II · Lembah Taktik', title: 'Opera Paris 1858', diff: 'Lanjutan', elo: 1650, fen: '4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 1 16', sol: ['b3b8', 'd7b8', 'd1d8'], obj: 'Skakmat dalam 2 langkah', hint: 'Tarik Kuda Hitam menjauh dari d8 dengan pengorbanan Menteri.', exp: '1. Qb8+!! Nxb8 2. Rd8# adalah mahakarya Paul Morphy.' },
+        { stage: 7, chapter: 'Babak III · Benteng Master', title: 'Sayap Kembar Boden', diff: 'Lanjutan', elo: 1850, fen: '2kr4/pp1n1ppp/2p5/8/Q4B2/3B4/PPP2PPP/2KR4 w - - 0 1', sol: ['a4c6', 'b7c6', 'd3a6'], obj: 'Skakmat dalam 2 langkah', hint: 'Hancurkan perisai bidak c6 dengan Menteri.', exp: '1. Qxc6+! bxc6 2. Ba6# membentuk Boden Mate.' },
+        { stage: 8, chapter: 'Babak III · Benteng Master', title: 'Pengalihan Koridor', diff: 'Master', elo: 2000, fen: '3r2k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1', sol: ['e2e8', 'd8e8', 'e1e8'], obj: 'Skakmat dalam 2 langkah', hint: 'Paksa Benteng pertahanan meninggalkan baris kedelapan.', exp: '1. Qxe8+! Rxe8 2. Rxe8# menembus baris belakang.' },
+        { stage: 9, chapter: 'Babak III · Benteng Master', title: 'Skakmat Anastasia', diff: 'Master', elo: 2150, fen: '5rk1/1p3ppp/8/3N4/7R/2Q5/5PPP/6K1 w - - 0 1', sol: ['d5e7', 'g8h8', 'h4h7', 'h8h7', 'c3h3'], obj: 'Skakmat dalam 3 langkah', hint: 'Kunci lajur g dengan Kuda di e7 lalu makan h7 dengan Benteng.', exp: '1. Ne7+ Kh8 2. Rxh7+! Kxh7 3. Qh3#.' },
+        { stage: 10, chapter: 'Babak IV · Puncak Grandmaster', title: 'Serangan Ganda Baris Belakang', diff: 'Grandmaster', elo: 2350, fen: '2r1r1k1/5ppp/8/8/8/1B3Q2/5PPP/3RR1K1 w - - 0 1', sol: ['f3f7', 'g8h8', 'e1e8', 'c8e8', 'f7e8'], obj: 'Skakmat dalam 3 langkah', hint: 'Serang f7 terlebih dahulu sebelum menukar perwira berat di e8.', exp: '1. Qxf7+ Kh8 2. Rxe8+ Rxe8 3. Qxe8#.' },
+        { stage: 11, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Segitiga Réti (1921)', diff: 'Grandmaster', elo: 2600, fen: '7K/8/k1P5/7p/8/8/8/8 w - - 0 1', sol: ['h8g7', 'h5h4', 'g7f6', 'a6b6', 'f6e5'], obj: 'Kejar bidak sekaligus kawal promosi (3 langkah kunci)', hint: 'Jangan lurus ke h4; bergeraklah diagonal menuju dua arah sekaligus!', exp: '1. Kg7! h4 2. Kf6! Kb6 3. Ke5!! — Studi legendaris Richard Réti.' },
+        { stage: 12, chapter: 'Babak IV · Puncak Grandmaster', title: 'Studi Saavedra (1895)', diff: 'Legendaris', elo: 2850, fen: '8/8/1KP5/3r4/8/8/8/k7 w - - 0 1', sol: ['c6c7', 'd5d6', 'b6b5', 'd6d5', 'b5b4', 'd5d4', 'b4b3', 'd4d3', 'b3c2', 'd3d4', 'c7c8r'], obj: 'Menang melawan Benteng (6 langkah presisi)', hint: 'Zig-zag Raja ke c2, lalu waspadai jebakan Pat saat promosi bidak!', exp: '1. c7 Rd6+ 2. Kb5 Rd5+ 3. Kb4 Rd4+ 4. Kb3 Rd3+ 5. Kc2! Rd4 6. c8=R!! Promosi Benteng menghindari Pat.' },
+      ];
+
+      // State
+      let currentTab = 'play';
+      let inArena = false;
+      let playMode = 'ai';
+      let timeSec = 300;
+      let aiDepth = 2;
+      let aiLabel = 'Klub (1500)';
+      let colorPref = 'w';
+      let playerColor = 'w';
+      let orientation = 'w';
+      let playChess = new Chess();
+      let selectedSq = null;
+      let lastMove = null;
+      let whiteMs = 300000;
+      let blackMs = 300000;
+      let timerHandle = null;
+      let isFullscreen = false;
+      let gameOver = false;
+      let aiBusy = false;
+
+      // Adventure State
+      let advUnlocked = Number(localStorage.getItem('cgs_html_adv_unlocked') || '1');
+      let advSolved = JSON.parse(localStorage.getItem('cgs_html_adv_solved') || '[]');
+      let advIdx = Math.min(ADVENTURE_STAGES.length - 1, Math.max(0, advUnlocked - 1));
+      let advChess = new Chess(ADVENTURE_STAGES[advIdx].fen);
+      let advStep = 0;
+      let advSelected = null;
+      let advLast = null;
+      let advStatus = 'playing';
+
+      const $ = (id) => document.getElementById(id);
+
+      function updateFooterVisibility() {
+        const showFooter = currentTab === 'play' && !inArena;
+        $('homeFooter').classList.toggle('hidden', !showFooter);
+      }
+
+      function applyTheme(t) {
+        document.documentElement.style.setProperty('--light-sq', t.light);
+        document.documentElement.style.setProperty('--dark-sq', t.dark);
+        document.querySelectorAll('#themeSwatches .swatch').forEach((el) => {
+          el.classList.toggle('active', el.dataset.tid === t.id);
+        });
+      }
+
+      THEMES.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'swatch' + (i === 0 ? ' active' : '');
+        btn.dataset.tid = t.id;
+        const bar = document.createElement('div');
+        bar.className = 'swatch-bar';
+        const l = document.createElement('div');
+        l.style.background = t.light;
+        const d = document.createElement('div');
+        d.style.background = t.dark;
+        bar.appendChild(l);
+        bar.appendChild(d);
+        const name = document.createElement('div');
+        name.textContent = t.name;
+        btn.appendChild(bar);
+        btn.appendChild(name);
+        btn.onclick = () => applyTheme(t);
+        $('themeSwatches').appendChild(btn);
+      });
+
+      $('darkToggleBtn').onclick = () => document.documentElement.classList.toggle('dark');
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('[data-tab]').forEach((b) => {
+          b.classList.toggle('active', b.dataset.tab === tab);
+        });
+        $('lobbyView').classList.toggle('hidden', tab !== 'play' || inArena);
+        $('arenaView').classList.toggle('hidden', tab !== 'play' || !inArena);
+        $('adventureView').classList.toggle('hidden', tab !== 'adventure');
+        updateFooterVisibility();
+        if (tab === 'adventure') renderAdventure();
+      }
+
+      document.querySelectorAll('[data-tab]').forEach((btn) => {
+        btn.onclick = () => switchTab(btn.dataset.tab);
+      });
+      $('brandBtn').onclick = () => {
+        inArena = false;
+        stopClock();
+        switchTab('play');
+      };
+
+      $('modeBtns').querySelectorAll('button').forEach((b) => {
+        b.onclick = () => {
+          if (b.dataset.goAdv) {
+            switchTab('adventure');
+            return;
+          }
+          playMode = b.dataset.mode;
+          $('modeBtns').querySelectorAll('[data-mode]').forEach((x) => x.classList.toggle('active', x === b));
+          $('aiConfigWrap').classList.toggle('hidden', playMode !== 'ai');
+        };
+      });
+
+      $('timeBtns').querySelectorAll('button').forEach((b) => {
+        b.onclick = () => {
+          timeSec = Number(b.dataset.sec);
+          $('timeBtns').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
+        };
+      });
+
+      $('diffBtns').querySelectorAll('button').forEach((b) => {
+        b.onclick = () => {
+          aiDepth = Number(b.dataset.depth);
+          aiLabel = b.dataset.label;
+          $('diffBtns').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
+        };
+      });
+
+      $('colorBtns').querySelectorAll('button').forEach((b) => {
+        b.onclick = () => {
+          colorPref = b.dataset.col;
+          $('colorBtns').querySelectorAll('button').forEach((x) => x.classList.toggle('active', x === b));
+        };
+      });
+
+      function fmtTime(ms) {
+        if (timeSec === 0) return 'Bebas';
+        const s = Math.max(0, Math.ceil(ms / 1000));
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
+      }
+
+      function stopClock() {
+        if (timerHandle) {
+          clearInterval(timerHandle);
+          timerHandle = null;
+        }
+      }
+
+      function startClock() {
+        stopClock();
+        if (timeSec === 0) return;
+        timerHandle = setInterval(() => {
+          if (gameOver || !inArena || playChess.history().length === 0) return;
+          if (playChess.turn() === 'w') {
+            whiteMs = Math.max(0, whiteMs - 1000);
+            if (whiteMs === 0) finishPlay('Waktu Putih Habis — Hitam Menang!');
+          } else {
+            blackMs = Math.max(0, blackMs - 1000);
+            if (blackMs === 0) finishPlay('Waktu Hitam Habis — Putih Menang!');
+          }
+          updateClocks();
+        }, 1000);
+      }
+
+      function updateClocks() {
+        const topCol = orientation === 'w' ? 'b' : 'w';
+        const botCol = orientation;
+        $('topName').textContent =
+          playMode === 'local' ? (topCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : topCol === playerColor ? 'Anda' : 'AI ' + aiLabel;
+        $('bottomName').textContent =
+          playMode === 'local' ? (botCol === 'w' ? 'Pemain Putih' : 'Pemain Hitam') : botCol === playerColor ? 'Anda' : 'AI ' + aiLabel;
+        $('topClock').textContent = fmtTime(topCol === 'w' ? whiteMs : blackMs);
+        $('bottomClock').textContent = fmtTime(botCol === 'w' ? whiteMs : blackMs);
+        $('topClock').classList.toggle('active', !gameOver && playChess.turn() === topCol);
+        $('bottomClock').classList.toggle('active', !gameOver && playChess.turn() === botCol);
+      }
+
+      function renderBoard(el, chessObj, orient, selSq, lastM, onSquareClick, hintSq = null) {
+        el.textContent = '';
+        const files = orient === 'w' ? ['a','b','c','d','e','f','g','h'] : ['h','g','f','e','d','c','b','a'];
+        const ranks = orient === 'w' ? ['8','7','6','5','4','3','2','1'] : ['1','2','3','4','5','6','7','8'];
+        const legalTargets = new Map();
+        if (selSq) {
+          chessObj.moves({ square: selSq, verbose: true }).forEach((m) => legalTargets.set(m.to, Boolean(m.captured)));
+        }
+
+        const board = chessObj.board();
+        ranks.forEach((rk, ri) => {
+          files.forEach((fl, fi) => {
+            const sqName = fl + rk;
+            const rIdx = 8 - Number(rk);
+            const fIdx = fl.charCodeAt(0) - 97;
+            const piece = board[rIdx][fIdx];
+            const isLight = (rIdx + fIdx) % 2 === 0;
+
+            const cell = document.createElement('div');
+            cell.className = 'sq ' + (isLight ? 'light' : 'dark');
+            if (selSq === sqName) cell.classList.add('selected');
+            if (lastM && (lastM.from === sqName || lastM.to === sqName)) cell.classList.add('last-move');
+            if (hintSq && hintSq === sqName) cell.classList.add('hint-from');
+            if (piece && piece.type === 'k' && piece.color === chessObj.turn() && chessObj.inCheck()) {
+              cell.classList.add('in-check');
+            }
+
+            if (legalTargets.has(sqName)) {
+              const marker = document.createElement('div');
+              marker.className = legalTargets.get(sqName) ? 'legal-cap' : 'legal-dot';
+              cell.appendChild(marker);
+            }
+
+            if (piece) {
+              const span = document.createElement('span');
+              span.className = 'piece ' + piece.color;
+              span.textContent = UNICODE_PIECES[piece.color + piece.type];
+              cell.appendChild(span);
+            }
+
+            if (fi === 0) {
+              const rLbl = document.createElement('span');
+              rLbl.className = 'coord-rank';
+              rLbl.textContent = rk;
+              cell.appendChild(rLbl);
+            }
+            if (ri === 7) {
+              const fLbl = document.createElement('span');
+              fLbl.className = 'coord-file';
+              fLbl.textContent = fl;
+              cell.appendChild(fLbl);
+            }
+
+            cell.onclick = () => onSquareClick(sqName);
+            el.appendChild(cell);
+          });
+        });
+      }
+
+      // Lightweight Alpha-Beta AI
+      const PVAL = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+      function evalPos(c) {
+        if (c.isCheckmate()) return c.turn() === 'w' ? -99999 : 99999;
+        if (c.isDraw()) return 0;
+        let score = 0;
+        const b = c.board();
+        for (let r = 0; r < 8; r++) {
+          for (let f = 0; f < 8; f++) {
+            const p = b[r][f];
+            if (!p) continue;
+            const center = (3.5 - Math.abs(3.5 - r)) + (3.5 - Math.abs(3.5 - f));
+            const val = PVAL[p.type] + (p.type !== 'k' ? center * 8 : 0);
+            score += p.color === 'w' ? val : -val;
+          }
+        }
+        return score;
+      }
+
+      function minimax(c, depth, alpha, beta, maxing) {
+        if (depth === 0 || c.isGameOver()) return evalPos(c);
+        const moves = c.moves({ verbose: true });
+        moves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
+        if (maxing) {
+          let best = -Infinity;
+          for (const m of moves) {
+            c.move(m);
+            best = Math.max(best, minimax(c, depth - 1, alpha, beta, false));
+            c.undo();
+            alpha = Math.max(alpha, best);
+            if (beta <= alpha) break;
+          }
+          return best;
+        } else {
+          let best = Infinity;
+          for (const m of moves) {
+            c.move(m);
+            best = Math.min(best, minimax(c, depth - 1, alpha, beta, true));
+            c.undo();
+            beta = Math.min(beta, best);
+            if (beta <= alpha) break;
+          }
+          return best;
+        }
+      }
+
+      function computeAIMove() {
+        if (gameOver || playMode !== 'ai' || playChess.turn() === playerColor) return;
+        aiBusy = true;
+        setTimeout(() => {
+          const moves = playChess.moves({ verbose: true });
+          if (moves.length === 0) {
+            aiBusy = false;
+            return;
+          }
+          const maxing = playChess.turn() === 'w';
+          let bestMove = moves[0];
+          let bestScore = maxing ? -Infinity : Infinity;
+          for (const m of moves) {
+            playChess.move(m);
+            const sc = minimax(playChess, aiDepth - 1, -Infinity, Infinity, !maxing);
+            playChess.undo();
+            if ((maxing && sc > bestScore) || (!maxing && sc < bestScore)) {
+              bestScore = sc;
+              bestMove = m;
+            }
+          }
+          const res = playChess.move(bestMove);
+          lastMove = { from: res.from, to: res.to };
+          aiBusy = false;
+          afterPlayMove();
+        }, 120);
+      }
+
+      function finishPlay(msg) {
+        gameOver = true;
+        stopClock();
+        $('matchNotice').textContent = msg;
+        $('matchNotice').className = 'notice ok';
+      }
+
+      function afterPlayMove() {
+        const hist = playChess.history();
+        if (hist.length === 0) {
+          $('moveList').textContent = 'Belum ada langkah.';
+        } else {
+          let out = '';
+          for (let i = 0; i < hist.length; i += 2) {
+            out += `${Math.floor(i / 2) + 1}. ${hist[i]} ${hist[i + 1] || ''}   `;
+          }
+          $('moveList').textContent = out;
+        }
+        updateClocks();
+        renderPlayBoard();
+        if (playChess.isCheckmate()) {
+          finishPlay(playChess.turn() === 'w' ? 'Skakmat! Hitam Menang.' : 'Skakmat! Putih Menang.');
+        } else if (playChess.isDraw()) {
+          finishPlay('Pertandingan Berakhir Remis.');
+        } else if (playMode === 'ai' && playChess.turn() !== playerColor) {
+          computeAIMove();
+        }
+      }
+
+      function askPromotion(overlayEl, btnsEl, col, onPick) {
+        btnsEl.textContent = '';
+        ['q', 'r', 'b', 'n'].forEach((p) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = UNICODE_PIECES[col + p];
+          b.onclick = () => {
+            overlayEl.classList.add('hidden');
+            onPick(p);
+          };
+          btnsEl.appendChild(b);
+        });
+        overlayEl.classList.remove('hidden');
+      }
+
+      function renderPlayBoard() {
+        renderBoard($('playBoard'), playChess, orientation, selectedSq, lastMove, (sq) => {
+          if (gameOver || aiBusy) return;
+          if (playMode === 'ai' && playChess.turn() !== playerColor) return;
+          if (selectedSq) {
+            const legal = playChess.moves({ square: selectedSq, verbose: true }).filter((m) => m.to === sq);
+            if (legal.length > 0) {
+              const from = selectedSq;
+              selectedSq = null;
+              if (legal.some((m) => m.promotion)) {
+                askPromotion($('playPromo'), $('playPromoBtns'), playChess.turn(), (p) => {
+                  const res = playChess.move({ from, to: sq, promotion: p });
+                  lastMove = { from: res.from, to: res.to };
+                  afterPlayMove();
+                });
+                return;
+              }
+              const res = playChess.move({ from, to: sq });
+              lastMove = { from: res.from, to: res.to };
+              afterPlayMove();
+              return;
+            }
+          }
+          const piece = playChess.get(sq);
+          if (piece && piece.color === playChess.turn() && (playMode === 'local' || piece.color === playerColor)) {
+            selectedSq = selectedSq === sq ? null : sq;
+          } else {
+            selectedSq = null;
+          }
+          renderPlayBoard();
+        });
+      }
+
+      $('startMatchBtn').onclick = () => {
+        playChess = new Chess();
+        selectedSq = null;
+        lastMove = null;
+        gameOver = false;
+        aiBusy = false;
+        playerColor = playMode === 'local' ? 'w' : colorPref === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : colorPref;
+        orientation = playerColor;
+        whiteMs = timeSec * 1000;
+        blackMs = timeSec * 1000;
+        $('matchNotice').className = 'notice hidden';
+        $('moveList').textContent = 'Belum ada langkah.';
+        inArena = true;
+        switchTab('play');
+        updateClocks();
+        renderPlayBoard();
+        startClock();
+        if (playMode === 'ai' && playerColor === 'b') computeAIMove();
+      };
+
+      $('flipBtn').onclick = () => {
+        orientation = orientation === 'w' ? 'b' : 'w';
+        updateClocks();
+        renderPlayBoard();
+      };
+      $('undoBtn').onclick = () => {
+        if (gameOver || aiBusy) return;
+        if (playMode === 'ai') {
+          playChess.undo();
+          playChess.undo();
+        } else {
+          playChess.undo();
+        }
+        selectedSq = null;
+        afterPlayMove();
+      };
+      $('resignBtn').onclick = () => {
+        if (!gameOver) finishPlay('Pemain Menyerah.');
+      };
+      $('backLobbyBtn').onclick = () => {
+        inArena = false;
+        isFullscreen = false;
+        $('arenaView').classList.remove('fullscreen-arena');
+        stopClock();
+        switchTab('play');
+      };
+      $('fsBtn').onclick = () => {
+        isFullscreen = !isFullscreen;
+        $('arenaView').classList.toggle('fullscreen-arena', isFullscreen);
+        $('fsBtn').textContent = isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh';
+      };
+
+      // ADVENTURE LOGIC
+      function renderAdventure() {
+        const st = ADVENTURE_STAGES[advIdx];
+        $('advMeta').textContent = `${st.chapter} · Tahap ${st.stage} · ${st.diff} (Elo ${st.elo})`;
+        $('advTitle').textContent = st.title;
+        $('advObjective').textContent = `Misi: ${st.obj}`;
+        $('advProgressLabel').textContent = `Peta Perjalanan (${advSolved.length}/${ADVENTURE_STAGES.length})`;
+        $('advNextBtn').classList.toggle('hidden', advStatus !== 'cleared' || advIdx + 1 >= ADVENTURE_STAGES.length);
+
+        const listEl = $('advStageList');
+        listEl.textContent = '';
+        ADVENTURE_STAGES.forEach((item, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'stage-item' + (idx === advIdx ? ' active' : '');
+          btn.disabled = item.stage > advUnlocked;
+          const left = document.createElement('span');
+          left.textContent = `${item.stage}. ${item.title} (${item.diff})`;
+          const right = document.createElement('span');
+          right.textContent = advSolved.includes(item.stage) ? '✓ Selesai' : item.stage > advUnlocked ? 'Terkunci' : `Elo ${item.elo}`;
+          btn.appendChild(left);
+          btn.appendChild(right);
+          btn.onclick = () => selectAdvStage(idx);
+          listEl.appendChild(btn);
+        });
+
+        renderBoard($('advBoard'), advChess, 'w', advSelected, advLast, handleAdvSquareClick);
+      }
+
+      function selectAdvStage(idx) {
+        advIdx = idx;
+        const st = ADVENTURE_STAGES[idx];
+        advChess = new Chess(st.fen);
+        advStep = 0;
+        advSelected = null;
+        advLast = null;
+        advStatus = 'playing';
+        $('advNotice').className = 'notice hidden';
+        renderAdventure();
+      }
+
+      function applyAdvMove(from, to, promotion) {
+        const st = ADVENTURE_STAGES[advIdx];
+        let moved;
+        try {
+          moved = advChess.move({ from, to, promotion });
+        } catch {
+          return;
+        }
+        const uci = moved.from + moved.to + (moved.promotion || '');
+        if (uci !== st.sol[advStep]) {
+          advChess.undo();
+          advStatus = 'wrong';
+          $('advNotice').textContent = 'Langkah kurang tepat. Coba langkah lain atau lihat Petunjuk.';
+          $('advNotice').className = 'notice err';
+          renderAdventure();
+          return;
+        }
+        advLast = { from: moved.from, to: moved.to };
+        advStep++;
+        if (advStep >= st.sol.length) {
+          advStatus = 'cleared';
+          if (!advSolved.includes(st.stage)) advSolved.push(st.stage);
+          advUnlocked = Math.min(ADVENTURE_STAGES.length, Math.max(advUnlocked, st.stage + 1));
+          localStorage.setItem('cgs_html_adv_solved', JSON.stringify(advSolved));
+          localStorage.setItem('cgs_html_adv_unlocked', String(advUnlocked));
+          $('advNotice').textContent = `Berhasil! ${st.exp}`;
+          $('advNotice').className = 'notice ok';
+          renderAdventure();
+          return;
+        }
+        $('advNotice').className = 'notice hidden';
+        renderAdventure();
+        setTimeout(() => {
+          const rep = st.sol[advStep];
+          if (!rep) return;
+          const rMoved = advChess.move({ from: rep.slice(0, 2), to: rep.slice(2, 4), promotion: rep[4] || undefined });
+          advLast = { from: rMoved.from, to: rMoved.to };
+          advStep++;
+          renderAdventure();
+        }, 320);
+      }
+
+      function handleAdvSquareClick(sq) {
+        if (advStatus === 'cleared') return;
+        if (advSelected) {
+          const legal = advChess.moves({ square: advSelected, verbose: true }).filter((m) => m.to === sq);
+          if (legal.length > 0) {
+            const from = advSelected;
+            advSelected = null;
+            if (legal.some((m) => m.promotion)) {
+              askPromotion($('advPromo'), $('advPromoBtns'), advChess.turn(), (p) => applyAdvMove(from, sq, p));
+              return;
+            }
+            applyAdvMove(from, sq);
+            return;
+          }
+        }
+        const piece = advChess.get(sq);
+        advSelected = piece && piece.color === advChess.turn() ? (advSelected === sq ? null : sq) : null;
+        renderAdventure();
+      }
+
+      $('advHintBtn').onclick = () => {
+        const st = ADVENTURE_STAGES[advIdx];
+        $('advNotice').textContent = `Petunjuk: ${st.hint}`;
+        $('advNotice').className = 'notice hint';
+      };
+      $('advResetBtn').onclick = () => selectAdvStage(advIdx);
+      $('advNextBtn').onclick = () => {
+        if (advIdx + 1 < ADVENTURE_STAGES.length) selectAdvStage(advIdx + 1);
+      };
+
+      updateFooterVisibility();
+    </script>
+  </body>
+</html>
